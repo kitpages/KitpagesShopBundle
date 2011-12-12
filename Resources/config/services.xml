@@ -4,17 +4,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <parameters>
-        <parameter key="kitpages_shop.example.class">Kitpages\ShopBundle\Example</parameter>
+        <parameter key="kitpages_shop.cartManager.class">Kitpages\ShopBundle\Model\Cart\CartManager</parameter>
     </parameters>
 
     <services>
-        <service id="kitpages_shop.example" class="%kitpages_shop.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="kitpages_shop.cartManager" class="%kitpages_shop.cartManager.class%">
+            <argument type="service" id="session" />
         </service>
     </services>
-    -->
+
 </container>

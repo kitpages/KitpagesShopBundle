@@ -1,0 +1,37 @@
+<table>
+    <thead>
+        <tr>
+            <td>Ref</td>
+            <td>Name</td>
+            <td>Quantity</td>
+            <td>Price</td>
+            <td>&nbsp;</td>
+        </tr>
+    </thead>
+    <tbody>
+    {% for line in cart.lineList %}
+        <tr>
+            <td>{{line.shopReference}}</td>
+            <td>
+                <h4>{{line.shopName}}</h4>
+                <div>{{line.shopDescription}}</div>
+            </td>
+            <td>{{line.quantity}}</td>
+            <td>{{ line.price }}</td>
+            <td><a href="{{line.deleteLinkUrl}}">[x]</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">Total</td>
+            <td>{{cart.totalPrice}}</td>
+        </tr>
+    </tfoot>
+</table>
+<div class="kit-shop-back-catalog-button">
+    <a href="javascript: history.go(-1)">Back to the catalog</a>
+</div>
+<div class="kit-shop-order-button">
+    <a href="{{ path('KitpagesShopBundle_order_create') }}">Order</a>
+</div>

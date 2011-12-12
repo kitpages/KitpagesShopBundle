@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="Kitpages\ShopBundle\Entity\OrderLine" repository-class="Kitpages\ShopBundle\Repository\OrderLineRepository" table="shop_order_history">
+
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="quantity" column="quantity" type="integer"/>
+        <field name="cartLineId" column="cart_line_id" type="integer" />
+        <field name="cartParentLineId" column="cart_parent_line_id" type="integer" nullable="true" />
+
+        <field name="shopReference" column="shop_reference" type="string" length="200" />
+        <field name="shopName" column="shop_name" type="string" length="250" />
+        <field name="shopDescription" column="shop_description" type="string" length="2000" nullable="true"/>
+
+        <!-- prices -->
+        <field name="priceWithoutVat" column="price_without_vat" type="float"/>
+        <field name="priceIncludingVat" column="price_including_vat" type="float"/>
+
+        <!-- dates -->
+        <field name="createdAt" type="datetime">
+            <gedmo:timestampable on="create"/>
+        </field>
+        <field name="updatedAt" type="datetime">
+            <gedmo:timestampable on="update"/>
+        </field>
+        
+        <!-- relations -->
+        <many-to-one field="order" target-entity="Kitpages\ShopBundle\Entity\Order" inversed-by="orderLineList" >
+            <join-columns>
+                <join-column name="order_id" referenced-column-name="id" on-delete="CASCADE" on-update="CASCADE" />
+            </join-columns>
+        </many-to-one>
+
+    </entity>
+
+</doctrine-mapping>
