@@ -45,7 +45,8 @@ class CartController extends Controller
                 "deleteLinkUrl" => $this->generateUrl(
                     "KitpagesShopBundle_cart_deleteLine",
                     array(
-                        "lineId"=>$line->getId()
+                        "lineId"=>$line->getId(),
+                        "kitpages_shop_target_url" => $_SERVER["REQUEST_URI"]
                     )
                 )
             );
@@ -58,5 +59,18 @@ class CartController extends Controller
                 'cartManagerModel' => $cartManager
             )
         );
+    }
+
+    /**
+     * remove a line from the cart and redirect to the target URL
+     * @param int $lineId
+     */
+    public function deleteLineAction($lineId)
+    {
+        $targetUrl = $this->getRequest()->query->get('kitpages_shop_target_url');
+        $cartManager = $this->get('kitpages_shop.cartManager');
+        $cart = $cartManager->getCart();
+        $cart->deleteLine($lineId);
+        return $this->redirect($targetUrl);
     }
 }

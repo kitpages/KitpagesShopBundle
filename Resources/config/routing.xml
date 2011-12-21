@@ -12,6 +12,7 @@
         <default key="_controller">KitpagesShopBundle:Cart:deleteLine</default>
     </route>
 
+    <!-- order -->
     <route id="KitpagesShopBundle_order_create" pattern="/order/create">
         <default key="_controller">KitpagesShopBundle:Order:create</default>
     </route>

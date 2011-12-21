@@ -1,0 +1,31 @@
+<table>
+    <thead>
+        <tr>
+            <td>Ref</td>
+            <td>Name</td>
+            <td>Quantity</td>
+            <td>Price</td>
+        </tr>
+    </thead>
+    <tbody>
+    {% for line in cart.lineList %}
+        <tr>
+            <td>{{line.shopReference}}</td>
+            <td>
+                <h4>{{line.shopName}}</h4>
+            </td>
+            <td>{{line.quantity}}</td>
+            <td>{{ line.price }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">Total</td>
+            <td>{{cart.totalPrice}}</td>
+        </tr>
+    </tfoot>
+</table>
+<div class="kit-shop-order-button">
+    <a href="{{ path('KitpagesShopBundle_order_create') }}">Order</a>
+</div>

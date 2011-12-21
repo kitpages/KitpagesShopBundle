@@ -7,8 +7,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class OrderController extends Controller
 {
-    public function createOrderAction($name)
+    public function createAction()
     {
-        return $this->render('KitpagesShopBundle:Default:index.html.twig', array('name' => $name));
+        $cartManager = $this->get('kitpages_shop.cartManager');
+        $cart = $cartManager->getCart();
+        // create order from cart
+
+        // redirect to the next page
+        $displayOrderRoute
+        return $this->redirect(
+            $this->generateUrl($displayOrderRoute)
+        );
     }
 }
