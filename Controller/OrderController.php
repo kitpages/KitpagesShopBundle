@@ -14,7 +14,7 @@ class OrderController extends Controller
         // create order from cart
 
         // redirect to the next page
-        $displayOrderRoute
+        $displayOrderRoute = "displayOrder";
         return $this->redirect(
             $this->generateUrl($displayOrderRoute)
         );
