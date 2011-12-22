@@ -29,7 +29,7 @@
         <!-- relations -->
         <one-to-many
             field="orderHistoryList"
-            target-entity="Kitpages\CmsBundle\Entity\OrderHistory"
+            target-entity="Kitpages\ShopBundle\Entity\OrderHistory"
             mapped-by="order"
         >
             <cascade>
@@ -47,15 +47,15 @@
             </cascade>
         </one-to-many>
 
-        <one-to-one field="invoice" target-entity="Kitpages\CmsBundle\Entity\Invoice" inversed-by="order">
+        <one-to-one field="invoice" target-entity="Kitpages\ShopBundle\Entity\Invoice" inversed-by="order">
             <join-column name="invoice_id" referenced-column-name="id" on-update="CASCADE" on-delete="SET NULL"/>
         </one-to-one>
 
-        <one-to-one field="invoiceUser" target-entity="Kitpages\CmsBundle\Entity\OrderUser" inversed-by="order">
+        <one-to-one field="invoiceUser" target-entity="Kitpages\ShopBundle\Entity\OrderUser" inversed-by="order">
             <join-column name="invoice_user_id" referenced-column-name="id" on-update="CASCADE" on-delete="CASCADE"/>
         </one-to-one>
 
-        <one-to-one field="shippingUser" target-entity="Kitpages\CmsBundle\Entity\OrderUser" inversed-by="order">
+        <one-to-one field="shippingUser" target-entity="Kitpages\ShopBundle\Entity\OrderUser" inversed-by="order">
             <join-column name="shipping_user_id" referenced-column-name="id" on-update="CASCADE" on-delete="CASCADE"/>
         </one-to-one>
 

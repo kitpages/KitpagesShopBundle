@@ -21,7 +21,7 @@
         </field>
 
         <!-- relations -->
-        <one-to-one field="order" target-entity="Kitpages\CmsBundle\Entity\Order" mapped-by="invoice">
+        <one-to-one field="order" target-entity="Kitpages\ShopBundle\Entity\Order" mapped-by="invoice">
             <cascade>
                 <cascade-all />
             </cascade>

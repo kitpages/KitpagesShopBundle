@@ -45,22 +45,22 @@ class Order
     private $id;
 
     /**
-     * @var Kitpages\CmsBundle\Entity\Invoice
+     * @var Kitpages\ShopBundle\Entity\Invoice
      */
     private $invoice;
 
     /**
-     * @var Kitpages\CmsBundle\Entity\OrderUser
+     * @var Kitpages\ShopBundle\Entity\OrderUser
      */
     private $invoiceUser;
 
     /**
-     * @var Kitpages\CmsBundle\Entity\OrderUser
+     * @var Kitpages\ShopBundle\Entity\OrderUser
      */
     private $shippingUser;
 
     /**
-     * @var Kitpages\CmsBundle\Entity\OrderHistory
+     * @var Kitpages\ShopBundle\Entity\OrderHistory
      */
     private $orderHistoryList;
 
@@ -228,9 +228,9 @@ class Order
     /**
      * Set invoice
      *
-     * @param Kitpages\CmsBundle\Entity\Invoice $invoice
+     * @param Kitpages\ShopBundle\Entity\Invoice $invoice
      */
-    public function setInvoice(\Kitpages\CmsBundle\Entity\Invoice $invoice)
+    public function setInvoice(\Kitpages\ShopBundle\Entity\Invoice $invoice)
     {
         $this->invoice = $invoice;
     }
@@ -238,7 +238,7 @@ class Order
     /**
      * Get invoice
      *
-     * @return Kitpages\CmsBundle\Entity\Invoice 
+     * @return Kitpages\ShopBundle\Entity\Invoice 
      */
     public function getInvoice()
     {
@@ -248,9 +248,9 @@ class Order
     /**
      * Set invoiceUser
      *
-     * @param Kitpages\CmsBundle\Entity\OrderUser $invoiceUser
+     * @param Kitpages\ShopBundle\Entity\OrderUser $invoiceUser
      */
-    public function setInvoiceUser(\Kitpages\CmsBundle\Entity\OrderUser $invoiceUser)
+    public function setInvoiceUser(\Kitpages\ShopBundle\Entity\OrderUser $invoiceUser)
     {
         $this->invoiceUser = $invoiceUser;
     }
@@ -258,7 +258,7 @@ class Order
     /**
      * Get invoiceUser
      *
-     * @return Kitpages\CmsBundle\Entity\OrderUser 
+     * @return Kitpages\ShopBundle\Entity\OrderUser 
      */
     public function getInvoiceUser()
     {
@@ -268,9 +268,9 @@ class Order
     /**
      * Set shippingUser
      *
-     * @param Kitpages\CmsBundle\Entity\OrderUser $shippingUser
+     * @param Kitpages\ShopBundle\Entity\OrderUser $shippingUser
      */
-    public function setShippingUser(\Kitpages\CmsBundle\Entity\OrderUser $shippingUser)
+    public function setShippingUser(\Kitpages\ShopBundle\Entity\OrderUser $shippingUser)
     {
         $this->shippingUser = $shippingUser;
     }
@@ -278,7 +278,7 @@ class Order
     /**
      * Get shippingUser
      *
-     * @return Kitpages\CmsBundle\Entity\OrderUser 
+     * @return Kitpages\ShopBundle\Entity\OrderUser 
      */
     public function getShippingUser()
     {
@@ -288,9 +288,9 @@ class Order
     /**
      * Add orderHistoryList
      *
-     * @param Kitpages\CmsBundle\Entity\OrderHistory $orderHistoryList
+     * @param Kitpages\ShopBundle\Entity\OrderHistory $orderHistoryList
      */
-    public function addOrderHistory(\Kitpages\CmsBundle\Entity\OrderHistory $orderHistoryList)
+    public function addOrderHistory(\Kitpages\ShopBundle\Entity\OrderHistory $orderHistoryList)
     {
         $this->orderHistoryList[] = $orderHistoryList;
     }

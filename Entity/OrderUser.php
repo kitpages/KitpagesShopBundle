@@ -70,12 +70,12 @@ class OrderUser
     private $id;
 
     /**
-     * @var Kitpages\CmsBundle\Entity\Order
+     * @var Kitpages\ShopBundle\Entity\Order
      */
     private $invoiceOrder;
 
     /**
-     * @var Kitpages\CmsBundle\Entity\Order
+     * @var Kitpages\ShopBundle\Entity\Order
      */
     private $shippingOrder;
 
@@ -333,9 +333,9 @@ class OrderUser
     /**
      * Set invoiceOrder
      *
-     * @param Kitpages\CmsBundle\Entity\Order $invoiceOrder
+     * @param Kitpages\ShopBundle\Entity\Order $invoiceOrder
      */
-    public function setInvoiceOrder(\Kitpages\CmsBundle\Entity\Order $invoiceOrder)
+    public function setInvoiceOrder(\Kitpages\ShopBundle\Entity\Order $invoiceOrder)
     {
         $this->invoiceOrder = $invoiceOrder;
     }
@@ -343,7 +343,7 @@ class OrderUser
     /**
      * Get invoiceOrder
      *
-     * @return Kitpages\CmsBundle\Entity\Order 
+     * @return Kitpages\ShopBundle\Entity\Order 
      */
     public function getInvoiceOrder()
     {
@@ -353,9 +353,9 @@ class OrderUser
     /**
      * Set shippingOrder
      *
-     * @param Kitpages\CmsBundle\Entity\Order $shippingOrder
+     * @param Kitpages\ShopBundle\Entity\Order $shippingOrder
      */
-    public function setShippingOrder(\Kitpages\CmsBundle\Entity\Order $shippingOrder)
+    public function setShippingOrder(\Kitpages\ShopBundle\Entity\Order $shippingOrder)
     {
         $this->shippingOrder = $shippingOrder;
     }
@@ -363,7 +363,7 @@ class OrderUser
     /**
      * Get shippingOrder
      *
-     * @return Kitpages\CmsBundle\Entity\Order 
+     * @return Kitpages\ShopBundle\Entity\Order 
      */
     public function getShippingOrder()
     {

@@ -3,6 +3,7 @@ namespace Kitpages\ShopBundle\Entity;
 
 class Invoice
 {
+
     /**
      * @var string $reference
      */
@@ -24,7 +25,7 @@ class Invoice
     private $id;
 
     /**
-     * @var Kitpages\CmsBundle\Entity\Order
+     * @var Kitpages\ShopBundle\Entity\Order
      */
     private $order;
 
@@ -102,9 +103,9 @@ class Invoice
     /**
      * Set order
      *
-     * @param Kitpages\CmsBundle\Entity\Order $order
+     * @param Kitpages\ShopBundle\Entity\Order $order
      */
-    public function setOrder(\Kitpages\CmsBundle\Entity\Order $order)
+    public function setOrder(\Kitpages\ShopBundle\Entity\Order $order)
     {
         $this->order = $order;
     }
@@ -112,7 +113,7 @@ class Invoice
     /**
      * Get order
      *
-     * @return Kitpages\CmsBundle\Entity\Order 
+     * @return Kitpages\ShopBundle\Entity\Order 
      */
     public function getOrder()
     {

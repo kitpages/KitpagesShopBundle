@@ -4,7 +4,7 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Kitpages\ShopBundle\Entity\OrderLine" repository-class="Kitpages\ShopBundle\Repository\OrderLineRepository" table="shop_order_history">
+    <entity name="Kitpages\ShopBundle\Entity\OrderLine" repository-class="Kitpages\ShopBundle\Repository\OrderLineRepository" table="shop_order_line">
 
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO" />

@@ -4,7 +4,7 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-    <entity name="Kitpages\ShopBundle\Entity\OrderUser" repository-class="Kitpages\ShopBundle\Repository\OrderRepository" table="shop_order">
+    <entity name="Kitpages\ShopBundle\Entity\OrderUser" repository-class="Kitpages\ShopBundle\Repository\OrderRepository" table="shop_order_user">
 
         <id name="id" type="integer" column="id">
             <generator strategy="AUTO" />
@@ -31,12 +31,12 @@
         </field>
 
         <!-- relations -->
-        <one-to-one field="invoiceOrder" target-entity="Kitpages\CmsBundle\Entity\Order" mapped-by="invoiceUser">
+        <one-to-one field="invoiceOrder" target-entity="Kitpages\ShopBundle\Entity\Order" mapped-by="invoiceUser">
             <cascade>
                 <cascade-all />
             </cascade>
         </one-to-one>
-        <one-to-one field="shippingOrder" target-entity="Kitpages\CmsBundle\Entity\Order" mapped-by="shippingUser">
+        <one-to-one field="shippingOrder" target-entity="Kitpages\ShopBundle\Entity\Order" mapped-by="shippingUser">
             <cascade>
                 <cascade-all />
             </cascade>
