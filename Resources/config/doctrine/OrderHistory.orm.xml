@@ -10,8 +10,7 @@
             <generator strategy="AUTO" />
         </id>
 
-        <field name="userId" column="user_id" type="integer" nullable="true" />
-        <field name="userLogin" column="user_login" type="string" length="200" nullable="true" />
+        <field name="username" column="user_login" type="string" length="200" nullable="true" />
         <field name="state" column="state" type="string" length="100" />
         <field name="stateDate" column="state_date" type="datetime"/>
         <field name="note" column="note" type="string" length="1000" nullable="true"/>

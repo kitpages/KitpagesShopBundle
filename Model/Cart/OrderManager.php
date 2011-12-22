@@ -32,14 +32,13 @@ class OrderManager
 
 
     /**
-     * @param CartInterface $cart
+     * @param string username ($this->get('security.context')->getToken()->getUsername();)
      * @param OrderUser|null $invoiceUser
      * @param OrderUser|null $shippingUser
      * @return Order $order
      */
     public function createOrder(
-        $userId = null,
-        $userLogin = null,
+        $username = null,
         OrderUser $invoiceUser = null,
         OrderUser $shippingUser = null
 
@@ -56,8 +55,7 @@ class OrderManager
 
         // create first orderHistory
         $orderHistory = new OrderHistory();
-        $orderHistory->setUserId($userId);
-        $orderHistory->setUserLogin($userLogin);
+        $orderHistory->setUsername($username);
         $orderHistory->setOrder($order);
         $orderHistory->setState("created");
         $orderHistory->setStateDate(new \DateTime());
@@ -93,10 +91,6 @@ class OrderManager
         if (!is_null($shippingUser)) {
             $order->setShippingUser($shippingUser);
         }
-        // persist order
-        $em = $this->doctrine->getEntityManager();
-        $em->persist($order);
-        $em->flush();
 
         return $order;
     }

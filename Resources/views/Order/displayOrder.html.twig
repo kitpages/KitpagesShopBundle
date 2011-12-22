@@ -1,0 +1,32 @@
+<table>
+    <thead>
+        <tr>
+            <td>Ref</td>
+            <td>Name</td>
+            <td>Quantity</td>
+            <td>Price</td>
+        </tr>
+    </thead>
+    <tbody>
+    {% for line in order.orderLineList %}
+        <tr>
+            <td>{{line.shopReference}}</td>
+            <td>
+                <h4>{{line.shopName}}</h4>
+                <div>{{line.shopDescription}}</div>
+            </td>
+            <td>{{line.quantity}}</td>
+            <td>{{ line.priceIncludingVat }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">Total</td>
+            <td>{{order.priceIncludingVat}}</td>
+        </tr>
+    </tfoot>
+</table>
+<div class="kit-shop-order-button">
+    <a href="{{ path('KitpagesShopBundle_order_create') }}">Payer</a>
+</div>

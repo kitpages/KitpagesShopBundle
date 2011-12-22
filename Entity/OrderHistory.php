@@ -5,16 +5,6 @@ class OrderHistory
 {
 
     /**
-     * @var integer $userId
-     */
-    private $userId;
-
-    /**
-     * @var string $userLogin
-     */
-    private $userLogin;
-
-    /**
      * @var string $state
      */
     private $state;
@@ -59,46 +49,6 @@ class OrderHistory
      */
     private $order;
 
-
-    /**
-     * Set userId
-     *
-     * @param integer $userId
-     */
-    public function setUserId($userId)
-    {
-        $this->userId = $userId;
-    }
-
-    /**
-     * Get userId
-     *
-     * @return integer 
-     */
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    /**
-     * Set userLogin
-     *
-     * @param string $userLogin
-     */
-    public function setUserLogin($userLogin)
-    {
-        $this->userLogin = $userLogin;
-    }
-
-    /**
-     * Get userLogin
-     *
-     * @return string 
-     */
-    public function getUserLogin()
-    {
-        return $this->userLogin;
-    }
 
     /**
      * Set state
@@ -268,5 +218,30 @@ class OrderHistory
     public function getOrder()
     {
         return $this->order;
+    }
+    /**
+     * @var string $username
+     */
+    private $username;
+
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * Get username
+     *
+     * @return string 
+     */
+    public function getUsername()
+    {
+        return $this->username;
     }
 }

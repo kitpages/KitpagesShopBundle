@@ -18,6 +18,10 @@
         <field name="priceWithoutVat" column="price_without_vat" type="float" nullable="true"/>
         <field name="priceIncludingVat" column="price_including_vat" type="float" nullable="true"/>
 
+        <!-- browsing context -->
+        <field name="locale" column="locale" type="string" length="20" nullable="false"/>
+        <field name="username" column="username" type="string" length="200" nullable="true" />
+
         <!-- dates -->
         <field name="createdAt" type="datetime">
             <gedmo:timestampable on="create"/>
@@ -49,14 +53,23 @@
 
         <one-to-one field="invoice" target-entity="Kitpages\ShopBundle\Entity\Invoice" inversed-by="order">
             <join-column name="invoice_id" referenced-column-name="id" on-update="CASCADE" on-delete="SET NULL"/>
+            <cascade>
+                <cascade-all />
+            </cascade>
         </one-to-one>
 
-        <one-to-one field="invoiceUser" target-entity="Kitpages\ShopBundle\Entity\OrderUser" inversed-by="order">
+        <one-to-one field="invoiceUser" target-entity="Kitpages\ShopBundle\Entity\OrderUser" inversed-by="invoiceOrder">
             <join-column name="invoice_user_id" referenced-column-name="id" on-update="CASCADE" on-delete="CASCADE"/>
+            <cascade>
+                <cascade-all />
+            </cascade>
         </one-to-one>
 
-        <one-to-one field="shippingUser" target-entity="Kitpages\ShopBundle\Entity\OrderUser" inversed-by="order">
+        <one-to-one field="shippingUser" target-entity="Kitpages\ShopBundle\Entity\OrderUser" inversed-by="shippingOrder">
             <join-column name="shipping_user_id" referenced-column-name="id" on-update="CASCADE" on-delete="CASCADE"/>
+            <cascade>
+                <cascade-all />
+            </cascade>
         </one-to-one>
 
     </entity>
