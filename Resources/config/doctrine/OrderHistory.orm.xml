@@ -14,11 +14,11 @@
         <field name="userLogin" column="user_login" type="string" length="200" nullable="true" />
         <field name="state" column="state" type="string" length="100" />
         <field name="stateDate" column="state_date" type="datetime"/>
-        <field name="note" column="note" type="string" length="1000" />
+        <field name="note" column="note" type="string" length="1000" nullable="true"/>
 
         <!-- prices -->
-        <field name="priceWithoutVat" column="price_without_vat" type="float"/>
-        <field name="priceIncludingVat" column="price_including_vat" type="float"/>
+        <field name="priceWithoutVat" column="price_without_vat" type="float" nullable="true"/>
+        <field name="priceIncludingVat" column="price_including_vat" type="float" nullable="true"/>
 
         <!-- dates -->
         <field name="createdAt" type="datetime">

@@ -19,8 +19,8 @@
         <field name="shopDescription" column="shop_description" type="string" length="2000" nullable="true"/>
 
         <!-- prices -->
-        <field name="priceWithoutVat" column="price_without_vat" type="float"/>
-        <field name="priceIncludingVat" column="price_including_vat" type="float"/>
+        <field name="priceWithoutVat" column="price_without_vat" type="float" nullable="true"/>
+        <field name="priceIncludingVat" column="price_including_vat" type="float" nullable="true"/>
 
         <!-- dates -->
         <field name="createdAt" type="datetime">

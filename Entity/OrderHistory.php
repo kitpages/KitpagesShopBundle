@@ -123,9 +123,9 @@ class OrderHistory
     /**
      * Set stateDate
      *
-     * @param datetime $stateDate
+     * @param \DateTime $stateDate
      */
-    public function setStateDate($stateDate)
+    public function setStateDate(\DateTime $stateDate)
     {
         $this->stateDate = $stateDate;
     }
@@ -133,7 +133,7 @@ class OrderHistory
     /**
      * Get stateDate
      *
-     * @return datetime 
+     * @return \DateTime
      */
     public function getStateDate()
     {
@@ -203,7 +203,7 @@ class OrderHistory
     /**
      * Set createdAt
      *
-     * @param datetime $createdAt
+     * @param \datetime $createdAt
      */
     public function setCreatedAt($createdAt)
     {
@@ -213,7 +213,7 @@ class OrderHistory
     /**
      * Get createdAt
      *
-     * @return datetime 
+     * @return \datetime
      */
     public function getCreatedAt()
     {
@@ -223,7 +223,7 @@ class OrderHistory
     /**
      * Set updatedAt
      *
-     * @param datetime $updatedAt
+     * @param \datetime $updatedAt
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -233,7 +233,7 @@ class OrderHistory
     /**
      * Get updatedAt
      *
-     * @return datetime 
+     * @return \datetime
      */
     public function getUpdatedAt()
     {
