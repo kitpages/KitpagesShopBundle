@@ -7,6 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Kitpages\ShopBundle\Entity\Order;
 use Kitpages\ShopBundle\Entity\OrderHistory;
 use Kitpages\ShopBundle\Entity\OrderUser;
+
+use Kitano\PaymentBundle\Model\Transaction;
+
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -83,14 +86,36 @@ class OrderController extends Controller
         $order->addOrderHistory($orderHistory);
         $order->setStateFromHistory();
 
+        // build transaction
+        $transaction = new Transaction(
+            $order->getId(),
+            $order->getPriceIncludingVat(),
+            new \DateTime(),
+            "EUR",
+            $order->getInvoiceUser()->getCountryCode()
+        );
+        $em->persist($transaction);
         $em->flush();
+
+        // generate link
+        $linkToPayment = $this->getPaymentSystem()->renderLinkToPayment($transaction);
 
         return $this->render(
             'KitpagesShopBundle:Order:displayOrder.html.twig',
             array(
-                'order' => $order
+                'order' => $order,
+                'linkToPayment' => $linkToPayment
             )
         );
 
     }
+
+    /**
+     * @return \Ano\Bundle\PaymentBundle\PaymentSystem\CreditCardInterface
+     */
+    public function getPaymentSystem()
+    {
+        return $this->get($this->container->getParameter('payment.service'));
+    }
+
 }
