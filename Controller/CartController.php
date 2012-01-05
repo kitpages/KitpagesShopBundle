@@ -40,6 +40,7 @@ class CartController extends Controller
                 "shopName" => $line->getCartable()->getShopName(),
                 "shopDescription" => $line->getCartable()->getShopDescription(),
                 "shopReference" => $line->getCartable()->getShopReference(),
+                "shopData" => $line->getCartable()->getShopData(),
                 "quantity" => $line->getQuantity(),
                 "price" => $cartManager->getLinePrice($line->getId()),
                 "deleteLinkUrl" => $this->generateUrl(
