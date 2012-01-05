@@ -17,6 +17,7 @@
         <field name="shopReference" column="shop_reference" type="string" length="200" />
         <field name="shopName" column="shop_name" type="string" length="250" />
         <field name="shopDescription" column="shop_description" type="string" length="2000" nullable="true"/>
+        <field name="shopData" column="shop_data" type="array" nullable="true"/>
 
         <!-- prices -->
         <field name="priceWithoutVat" column="price_without_vat" type="float" nullable="true"/>

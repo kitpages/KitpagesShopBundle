@@ -75,6 +75,7 @@ class OrderManager
             $orderLine->setQuantity($line->getQuantity());
             $orderLine->setShopName($line->getCartable()->getShopName());
             $orderLine->setShopDescription($line->getCartable()->getShopDescription());
+            $orderLine->setShopData($line->getCartable()->getShopData());
             $orderLine->setShopReference($line->getCartable()->getShopReference());
             if ($this->isCartIncludingVat) {
                 $orderLine->setPriceIncludingVat($this->cartManager->getLinePrice($line->getId()));

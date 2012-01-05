@@ -294,4 +294,29 @@ class OrderLine
     {
         return $this->order;
     }
+    /**
+     * @var array $shopData
+     */
+    private $shopData;
+
+
+    /**
+     * Set shopData
+     *
+     * @param array $shopData
+     */
+    public function setShopData($shopData)
+    {
+        $this->shopData = $shopData;
+    }
+
+    /**
+     * Get shopData
+     *
+     * @return array 
+     */
+    public function getShopData()
+    {
+        return $this->shopData;
+    }
 }
