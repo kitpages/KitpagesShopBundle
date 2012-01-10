@@ -18,6 +18,7 @@ class OrderManager
     protected $isCartIncludingVat = null;
     protected $cartManager = null;
     protected $doctrine = null;
+    /** @var null|LoggerInterface */
     protected $logger = null;
 
     public function __construct(
@@ -139,6 +140,10 @@ class OrderManager
         $order = $repo->find($transaction->getOrderId());
         if (! $order instanceof Order) {
             throw new Exception("unknown order for transactionId=".$transaction->getId());
+        }
+        if ($order->getState() != OrderHistory::STATE_READY_TO_PAY) {
+            $this->logger->info("orderId=".$order->getId()." not updated by payment process because state is not ready_to_pay");
+            return;
         }
         // transaction status ok
         if ($transaction->getState() == Transaction::STATE_APPROVED) {
