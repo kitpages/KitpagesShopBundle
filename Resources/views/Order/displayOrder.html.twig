@@ -23,7 +23,15 @@
     <tfoot>
         <tr>
             <td colspan="3">Total</td>
-            <td>{{order.priceIncludingVat}}</td>
+            <td>
+                {% if (order.priceIncludingVat == order.priceWithoutVat) %}
+                    {{order.priceIncludingVat}}
+                {% else %}
+                    Without VAT : {{order.priceWithoutVat}}<br/>
+                    VAT : {{order.priceIncludingVat - order.priceWithoutVat}}<br/>
+                    Including VAT : {{order.priceIncludingVat}}
+                {% endif %}
+            </td>
         </tr>
     </tfoot>
 </table>

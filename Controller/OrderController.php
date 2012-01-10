@@ -75,6 +75,11 @@ class OrderController extends Controller
             $shippingUser->setShippingOrder($order);
         }
 
+        // calculate VAT
+        $orderManager = $this->get('kitpages_shop.orderManager');
+        $orderManager->addVat($order);
+
+        // complete order
         $orderHistory = new OrderHistory();
         $orderHistory->setUsername($this->get('security.context')->getToken()->getUsername());
         $orderHistory->setOrder($order);

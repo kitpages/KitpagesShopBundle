@@ -4,6 +4,7 @@ namespace Kitpages\ShopBundle\Model\Cart;
 use Kitpages\ShopBundle\Entity\Order;
 use Kitpages\ShopBundle\Entity\OrderHistory;
 use Kitpages\ShopBundle\Entity\OrderLine;
+use Kitpages\ShopBundle\Entity\OrderUser;
 use Kitpages\ShopBundle\Model\Cart\CartInterface;
 
 use Kitano\PaymentBundle\Event\PaymentEvent;
@@ -98,6 +99,46 @@ class OrderManager
         }
 
         return $order;
+    }
+
+    public function addVat(Order $order)
+    {
+        $invoiceUser = $order->getInvoiceUser();
+        if (! ($invoiceUser instanceof OrderUser) ) {
+            $hasVat = false;
+        } elseif ($invoiceUser->getCountryCode() == null) {
+            $hasVat = false;
+        } else {
+            $countryCode = $invoiceUser->getCountryCode();
+            $hasVat = true;
+        }
+
+        if ($hasVat) {
+            $vat = $this->cartManager->getTotalVat($countryCode);
+        } else {
+            $vat = 0;
+        }
+        if ($this->isCartIncludingVat) {
+            $order->setPriceWithoutVat($order->getPriceIncludingVat() - $vat);
+        }
+        else {
+            $order->setPriceIncludingVat($order->getPriceWithoutVat() + $vat);
+        }
+        foreach ($order->getOrderLineList() as $orderLine)
+        {
+            if ($hasVat) {
+                $vat = $this->cartManager->getLineVat($orderLine->getCartLineId(), $countryCode);
+            } else {
+                $vat = 0;
+            }
+
+            if ($this->isCartIncludingVat) {
+                $orderLine->setPriceWithoutVat($orderLine->getPriceIncludingVat() - $vat );
+            } else {
+                $orderLine->setPriceIncludingVat($orderLine->getPriceWithoutVat() + $vat );
+            }
+        }
+
     }
 
     protected function getNewRandomKey() {

@@ -83,12 +83,31 @@ class CartManager
     }
 
     /**
+     * returns the VAT of line in the cart
+     * @param int $lineId id of the cart line
+     * @return float price of a given line
+     */
+    public function getLineVat($lineId, $countryCode)
+    {
+        return $this->priceFactory->getLineVat($lineId, $countryCode);
+    }
+
+    /**
      * returns the total price of the cart
      * @return float price of the cart
      */
     public function getTotalPrice()
     {
         return $this->priceFactory->getCartPrice();
+    }
+    /**
+     * returns the total price of the cart
+     * @param string $countryCode (ex: "FR", "US")
+     * @return float price of the cart
+     */
+    public function getTotalVat($countryCode)
+    {
+        return $this->priceFactory->getCartVat($countryCode);
     }
 
     public function getCart()

@@ -43,6 +43,14 @@ interface CartManagerInterface
     public function getLinePrice($lineId);
 
     /**
+     * returns the vat of the line in the cart
+     * @param int $lineId
+     * @param string $countryCode (ex : FR, US, BE)
+     * @return float vat of a given line
+     */
+    public function getLineVat($lineId, $countryCode);
+
+    /**
      * returns the total price of the cart
      * @return float price of the cart
      */
