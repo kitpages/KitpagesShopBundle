@@ -78,7 +78,7 @@ class OrderController extends Controller
         $orderHistory = new OrderHistory();
         $orderHistory->setUsername($this->get('security.context')->getToken()->getUsername());
         $orderHistory->setOrder($order);
-        $orderHistory->setState("ready_to_pay");
+        $orderHistory->setState(OrderHistory::STATE_READY_TO_PAY);
         $orderHistory->setNote("order complete and displayed to the user");
         $orderHistory->setStateDate(new \DateTime());
         $orderHistory->setPriceIncludingVat($order->getPriceIncludingVat());

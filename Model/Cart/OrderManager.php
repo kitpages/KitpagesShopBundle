@@ -6,6 +6,9 @@ use Kitpages\ShopBundle\Entity\OrderHistory;
 use Kitpages\ShopBundle\Entity\OrderLine;
 use Kitpages\ShopBundle\Model\Cart\CartInterface;
 
+use Kitano\PaymentBundle\Event\PaymentEvent;
+use Kitano\PaymentBundle\Model\Transaction;
+
 use Symfony\Component\HttpFoundation\Session;
 use Symfony\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
@@ -57,7 +60,7 @@ class OrderManager
         $orderHistory = new OrderHistory();
         $orderHistory->setUsername($username);
         $orderHistory->setOrder($order);
-        $orderHistory->setState("created");
+        $orderHistory->setState(OrderHistory::STATE_CREATED);
         $orderHistory->setStateDate(new \DateTime());
         $orderHistory->setPriceIncludingVat($order->getPriceIncludingVat());
         $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
@@ -118,5 +121,56 @@ class OrderManager
         else {
             $order->setPriceWithoutVat($price);
         }
+    }
+
+    public function paymentListener(PaymentEvent $event)
+    {
+        $transaction = $event->getTransaction();
+        if ($transaction == null) {
+            return;
+        }
+        // check transaction success
+        if ($transaction->getSuccess() === false) {
+            throw new Exception("transaction failed, transactionId=".$transaction->getId());
+        }
+        // get order
+        $em = $this->doctrine->getEntityManager();
+        $repo = $em->getRepository("KitpagesShopBundle:Order");
+        $order = $repo->find($transaction->getOrderId());
+        if (! $order instanceof Order) {
+            throw new Exception("unknown order for transactionId=".$transaction->getId());
+        }
+        // transaction status ok
+        if ($transaction->getState() == Transaction::STATE_APPROVED) {
+            // update order
+            $orderHistory = new OrderHistory();
+            $orderHistory->setUsername("payment-notification");
+            $orderHistory->setOrder($order);
+            $orderHistory->setState(OrderHistory::STATE_PAYED);
+            $orderHistory->setStateDate(new \DateTime());
+            $orderHistory->setPriceIncludingVat($order->getPriceIncludingVat());
+            $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
+            $orderHistory->setNote("Transaction accepted by the bank, transactionId=".$transaction->getId());
+            $order->addOrderHistory($orderHistory);
+            $order->setStateFromHistory();
+            $em->flush();
+            // empty cart
+            $this->cartManager->getCart()->emptyCart();
+            // TODO : generate invoice
+
+            return;
+        }
+
+        $orderHistory = new OrderHistory();
+        $orderHistory->setUsername("payment-notification");
+        $orderHistory->setOrder($order);
+        $orderHistory->setState(OrderHistory::STATE_READY_TO_PAY);
+        $orderHistory->setStateDate(new \DateTime());
+        $orderHistory->setPriceIncludingVat($order->getPriceIncludingVat());
+        $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
+        $orderHistory->setNote("Payment refused by the bank, transactionId=".$transaction->getId().", transactionState=".$transaction->getState());
+        $order->addOrderHistory($orderHistory);
+        $order->setStateFromHistory();
+        $em->flush();
     }
 }

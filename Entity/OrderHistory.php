@@ -3,7 +3,10 @@ namespace Kitpages\ShopBundle\Entity;
 
 class OrderHistory
 {
-
+    const STATE_CREATED="created";
+    const STATE_READY_TO_PAY="ready_to_pay";
+    const STATE_PAYED="payed";
+    const STATE_CANCELED="canceled";
     /**
      * @var string $state
      */
