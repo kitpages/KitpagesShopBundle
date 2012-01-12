@@ -18,9 +18,17 @@
             <argument type="service" id="logger"/>
             <argument type="service" id="kitpages_shop.cartManager" />
             <argument>%kitpages_shop.is_cart_including_vat%</argument>
+            <argument type="service" id="templating"/>
+            <argument type="service" id="event_dispatcher"/>
+
             <tag name="kernel.event_listener" event="kitano_payment.event.after_payment_notification" method="paymentListener" />
             <tag name="kernel.event_listener" event="kitano_payment.event.after_back_to_shop" method="paymentListener" />
         </service>
+
+        <service id="kitpages_shop.twig.extension.shopExtension" class="Kitpages\ShopBundle\Twig\Extension\ShopExtension">
+            <tag name="twig.extension" />
+        </service>
+
     </services>
 
 </container>

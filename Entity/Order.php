@@ -9,16 +9,19 @@ class Order
     public function setStateFromHistory()
     {
         $historyList = $this->getOrderHistoryList();
-        $currentDate = null;
+        $currentId = null;
         $currentState = null;
+        $currentDate = null;
         foreach ($historyList as $history) {
-            if (is_null($currentDate)) {
-                $currentDate = $history->getStateDate();
+            if (is_null($currentId)) {
+                $currentId = $history->getId();
                 $currentState = $history->getState();
+                $currentDate = $history->getStateDate();
             }
-            if ($currentDate < $history->getStateDate()) {
-                $currentDate = $history->getStateDate();
+            if ($currentId < $history->getId()) {
+                $currentId = $history->getId();
                 $currentState = $history->getState();
+                $currentDate = $history->getStateDate();
             }
         }
         $this->setState($currentState);

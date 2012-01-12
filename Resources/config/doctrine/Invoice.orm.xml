@@ -10,7 +10,9 @@
             <generator strategy="AUTO" />
         </id>
 
-        <field name="reference" column="reference" type="string" unique="true" length="250"/>
+        <field name="reference" column="reference" type="string" unique="true" length="250" nullable="true"/>
+
+        <field name="contentHtml" column="content_html" type="string" nullable="true"/>
 
         <!-- dates -->
         <field name="createdAt" type="datetime">

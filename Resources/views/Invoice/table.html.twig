@@ -1,0 +1,59 @@
+<table>
+    <thead>
+        <tr>
+            <td colspan="4">
+                <h1>{{ "Invoice" | trans }} {{invoice.reference}}</h1>
+                <span>{{ "Date" | trans}} : {{ order.stateDate | date("m/d/Y") }}</span><br/>
+                Company
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <h2>Client</h2>
+                {{order.invoiceUser.firstName}} {{order.invoiceUser.lastName}}<br/>
+                {{order.invoiceUser.email}}<br/>
+                {{order.invoiceUser.countryCode|kit_shop_country(app.session.locale)}}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+                <h2>Invoice content</h2>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Ref</td>
+            <td>Name</td>
+            <td>Quantity</td>
+            <td>Price</td>
+        </tr>
+    </tbody>
+    <tbody>
+    {% for line in order.orderLineList %}
+        <tr>
+            <td>{{line.shopReference}}</td>
+            <td>
+                <h4>{{line.shopName}}</h4>
+                <div>{{line.shopDescription}}</div>
+            </td>
+            <td>{{line.quantity}}</td>
+            <td>{{ line.priceIncludingVat }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">Total</td>
+            <td>
+                {% if (order.priceIncludingVat == order.priceWithoutVat) %}
+                    {{order.priceIncludingVat}}
+                {% else %}
+                    Without VAT : {{order.priceWithoutVat}}<br/>
+                    VAT : {{order.priceIncludingVat - order.priceWithoutVat}}<br/>
+                    Including VAT : {{order.priceIncludingVat}}
+                {% endif %}
+            </td>
+        </tr>
+    </tfoot>
+</table>

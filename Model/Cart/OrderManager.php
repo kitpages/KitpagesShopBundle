@@ -5,7 +5,10 @@ use Kitpages\ShopBundle\Entity\Order;
 use Kitpages\ShopBundle\Entity\OrderHistory;
 use Kitpages\ShopBundle\Entity\OrderLine;
 use Kitpages\ShopBundle\Entity\OrderUser;
+use Kitpages\ShopBundle\Entity\Invoice;
 use Kitpages\ShopBundle\Model\Cart\CartInterface;
+use Kitpages\ShopBundle\Event\ShopEvent;
+use Kitpages\ShopBundle\KitpagesShopEvents;
 
 use Kitano\PaymentBundle\Event\PaymentEvent;
 use Kitano\PaymentBundle\Model\Transaction;
@@ -13,6 +16,9 @@ use Kitano\PaymentBundle\Model\Transaction;
 use Symfony\Component\HttpFoundation\Session;
 use Symfony\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Templating\EngineInterface;
+
 
 class OrderManager
 {
@@ -22,17 +28,27 @@ class OrderManager
     /** @var null|LoggerInterface */
     protected $logger = null;
 
+    /** @var null|\Symfony\Component\Templating\EngineInterface */
+    protected $templating = null;
+
+    /** @var null|\Symfony\Component\EventDispatcher\EventDispatcherInterface */
+    protected $dispatcher = null;
+
     public function __construct(
         Registry $doctrine,
         LoggerInterface $logger,
         CartManagerInterface $cartManager,
-        $isCartIncludingVat
+        $isCartIncludingVat,
+        EngineInterface $templating,
+        EventDispatcherInterface $dispatcher
     )
     {
         $this->doctrine = $doctrine;
         $this->logger = $logger;
         $this->cartManager = $cartManager;
         $this->isCartIncludingVat = $isCartIncludingVat;
+        $this->templating = $templating;
+        $this->dispatcher = $dispatcher;
     }
 
 
@@ -182,6 +198,9 @@ class OrderManager
         if (! $order instanceof Order) {
             throw new Exception("unknown order for transactionId=".$transaction->getId());
         }
+        if ($order->getState() != OrderHistory::STATE_PAYED) {
+            $this->cartManager->getCart()->emptyCart();
+        }
         if ($order->getState() != OrderHistory::STATE_READY_TO_PAY) {
             $this->logger->info("orderId=".$order->getId()." not updated by payment process because state is not ready_to_pay");
             return;
@@ -202,7 +221,31 @@ class OrderManager
             $em->flush();
             // empty cart
             $this->cartManager->getCart()->emptyCart();
-            // TODO : generate invoice
+            // generate invoice, id generation
+            $invoice = new Invoice();
+            $invoice->setOrder($order);
+            $invoice->setReference(null);
+            $em->persist($invoice);
+            $em->flush();
+            // invoice generation step 2 (html and reference generation)
+            $invoice->setReference('I-'.$invoice->getId());
+            $invoiceHtmlContent = $this->templating->render(
+                "KitpagesShopBundle:Invoice:table.html.twig",
+                array(
+                    "order" => $order,
+                    "transaction" => $transaction,
+                    "invoice" => $invoice
+                )
+            );
+            $invoice->setContentHtml($invoiceHtmlContent);
+            $em->flush();
+
+            $event = new ShopEvent();
+            $event->set("transaction", $transaction);
+            $event->set("order", $order);
+            $event->set("invoice", $invoice);
+            $event->set("orderHistory", $orderHistory);
+            $this->dispatcher->dispatch(KitpagesShopEvents::AFTER_ORDER_PAYED, $event);
 
             return;
         }
@@ -218,5 +261,12 @@ class OrderManager
         $order->addOrderHistory($orderHistory);
         $order->setStateFromHistory();
         $em->flush();
+
+        $event = new ShopEvent();
+        $event->set("transaction", $transaction);
+        $event->set("order", $order);
+        $event->set("orderHistory", $orderHistory);
+        $this->dispatcher->dispatch(KitpagesShopEvents::AFTER_TRANSACTION_REFUSED, $event);
+
     }
 }

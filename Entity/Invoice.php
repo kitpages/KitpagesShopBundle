@@ -10,6 +10,11 @@ class Invoice
     private $reference;
 
     /**
+     * @var string $contentHtml
+     */
+    private $contentHtml;
+
+    /**
      * @var datetime $createdAt
      */
     private $createdAt;
@@ -48,6 +53,22 @@ class Invoice
     public function getReference()
     {
         return $this->reference;
+    }
+
+    /**
+     * @param string $contentHtml
+     */
+    public function setContentHtml($contentHtml)
+    {
+        $this->contentHtml = $contentHtml;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContentHtml()
+    {
+        return $this->contentHtml;
     }
 
     /**
@@ -119,4 +140,5 @@ class Invoice
     {
         return $this->order;
     }
+
 }

@@ -89,6 +89,7 @@ class OrderController extends Controller
         $orderHistory->setPriceIncludingVat($order->getPriceIncludingVat());
         $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
         $order->addOrderHistory($orderHistory);
+        $em->flush(); // hack in order to have an id in the orderHistory...
         $order->setStateFromHistory();
 
         // build transaction
