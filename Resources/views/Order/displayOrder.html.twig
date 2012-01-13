@@ -1,10 +1,10 @@
 <table>
     <thead>
         <tr>
-            <td>Ref</td>
-            <td>Name</td>
-            <td>Quantity</td>
-            <td>Price</td>
+            <td>{{"Ref"|trans}}</td>
+            <td>{{"Name"|trans}}</td>
+            <td>{{"Quantity"|trans}}</td>
+            <td>{{"Price"|trans}}</td>
         </tr>
     </thead>
     <tbody>
@@ -22,19 +22,38 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="3">Total</td>
+            <td colspan="3">{{"Total"|trans}}</td>
             <td>
                 {% if (order.priceIncludingVat == order.priceWithoutVat) %}
                     {{order.priceIncludingVat}}
                 {% else %}
-                    Without VAT : {{order.priceWithoutVat}}<br/>
-                    VAT : {{order.priceIncludingVat - order.priceWithoutVat}}<br/>
-                    Including VAT : {{order.priceIncludingVat}}
+                    {{ "Without VAT" | trans }}: {{order.priceWithoutVat}}<br/>
+                    {{ "VAT" | trans }} : {{order.priceIncludingVat - order.priceWithoutVat}}<br/>
+                    {{ "Including VAT" | trans }} : {{order.priceIncludingVat}}
                 {% endif %}
             </td>
         </tr>
     </tfoot>
 </table>
-<div class="kit-shop-order-button">
-    {{ linkToPayment | raw}}
+
+<div class="kitpages-shop-payment-system">
+    <input class="kitpages-shop-payment-system-terms" type="checkbox" value="YES"/>
+    {{ "I confirm I have read and accept the " | trans }}
+    <a href="{{path("KitpagesShopBundle_order_terms")}}" target="_blank">{{"General Terms and Conditions" | trans }}</a>
+
+    <div class="kit-shop-order-button">
+    </div>
 </div>
+<script>
+    // WARNING : don't use show and hide. Payments have to be hidden event if JS and CSS are desactivated.
+    (function() {
+        $(".kitpages-shop-payment-system-terms").click(function() {
+            var el = $(this);
+            if (el.attr('checked')) {
+                $(".kit-shop-order-button").html('{{ linkToPayment | raw | escape("js") }}');
+            } else {
+                $(".kit-shop-order-button").html('');
+            }
+        });
+    })();
+</script>

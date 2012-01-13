@@ -116,6 +116,13 @@ class OrderController extends Controller
 
     }
 
+    public function termsAction()
+    {
+        return $this->render(
+            'KitpagesShopBundle:Order:terms.html.twig'
+        );
+    }
+
     /**
      * @return \Ano\Bundle\PaymentBundle\PaymentSystem\CreditCardInterface
      */
