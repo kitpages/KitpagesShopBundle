@@ -34,6 +34,9 @@ class KitpagesShopExtension extends Extension
         $this->remapParameters($config, $container, array(
             'is_cart_including_vat'  => 'kitpages_shop.is_cart_including_vat'
         ));
+        $this->remapParameters($config, $container, array(
+            'from_email'  => 'kitpages_shop.from_email'
+        ));
 
     }
 

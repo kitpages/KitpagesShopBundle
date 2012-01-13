@@ -16,4 +16,7 @@
     <route id="KitpagesShopBundle_order_create" pattern="/order/create">
         <default key="_controller">KitpagesShopBundle:Order:create</default>
     </route>
+    <route id="KitpagesShopBundle_invoice_invoiceDisplay" pattern="/invoice/display/{orderId}">
+        <default key="_controller">KitpagesShopBundle:Invoice:invoiceDisplay</default>
+    </route>
 </routes>

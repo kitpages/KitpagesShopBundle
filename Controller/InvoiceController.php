@@ -6,8 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Kitpages\ShopBundle\Entity\Order;
 use Kitpages\ShopBundle\Entity\OrderHistory;
-use Kitpages\ShopBundle\Entity\OrderUser;
-
+use Kitpages\ShopBundle\Entity\Invoice;
 use Kitano\PaymentBundle\Model\Transaction;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -15,33 +14,31 @@ use Symfony\Component\HttpFoundation\Request;
 
 
 
-class OrderController extends Controller
+class InvoiceController extends Controller
 {
-    public function createAction()
+    public function invoiceDisplayAction($orderId)
     {
-        $orderManager = $this->get('kitpages_shop.orderManager');
-        $logger = $this->get('logger');
-        $logger->debug("create order, user=".$this->get('security.context')->getToken()->getUser());
-        // create order from cart
-        $order = $orderManager->createOrder();
-        $order->setLocale($this->get('session')->getLocale());
-        if($this->get('security.context')->isGranted('ROLE_USER')) {
-            $order->setUsername($this->get('security.context')->getToken()->getUsername());
+        if (! $this->get('security.context')->isGranted('ROLE_USER') ) {
+            return new Response('The user should be authenticated on this page');
         }
-        // persist order
-        $em = $this->getDoctrine()->getEntityManager();
-        $em->persist($order);
-        $em->flush();
+        $doctrine = $this->get("doctrine");
+        $em = $doctrine->getEntityManager();
+        $repo = $em->getRepository("KitpagesShopBundle:Order");
+        $order = $repo->find($orderId);
+        if (! $order instanceof Order) {
+            throw new Exception("InvoiceController : unknown order for orderId=".$orderId);
+        }
+        if ($order->getState() != OrderHistory::STATE_PAYED) {
+            throw new Exception("InvoiceController : order is not payed for orderId=".$orderId);
+        }
+        if ($order->getUsername() != $this->get('security.context')->getToken()->getUsername() ) {
+            $response = new Response('You are not allowed to see this order', '403');
+            return $response;
+        }
+        $invoice = $order->getInvoice();
+        $response = new Response($invoice->getContentHtml());
+        return $response;
 
-
-        // redirect to the next page
-        $displayOrderRoute = $this->container->getParameter('kitpages_shop.order_display_route_name');
-        return $this->redirect(
-            $this->generateUrl(
-                $displayOrderRoute,
-                array('orderId'=> $order->getId())
-            )
-        );
     }
 
     public function displayOrderAction(

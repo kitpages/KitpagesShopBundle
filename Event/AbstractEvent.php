@@ -7,6 +7,7 @@ abstract class AbstractEvent extends Event
 {
     protected $data = array();
     protected $isDefaultPrevented = false;
+    protected $isPropagationStopped = false;
     
     public function preventDefault()
     {
@@ -16,6 +17,16 @@ abstract class AbstractEvent extends Event
     public function isDefaultPrevented()
     {
         return $this->isDefaultPrevented;
+    }
+
+    public function stopPropagation()
+    {
+        $this->isPropagationStopped = true;
+    }
+
+    public function isPropagationStopped()
+    {
+        return $this->isPropagationStopped;
     }
     
     public function set($key, $val)
