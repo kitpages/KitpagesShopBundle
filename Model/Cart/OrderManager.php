@@ -250,6 +250,30 @@ class OrderManager
             return;
         }
 
+        // transaction status ok
+        if ($transaction->getState() == Transaction::STATE_CANCELED_BY_USER) {
+            // update order
+            $orderHistory = new OrderHistory();
+            $orderHistory->setUsername("payment-notification");
+            $orderHistory->setOrder($order);
+            $orderHistory->setState(OrderHistory::STATE_CANCELED);
+            $orderHistory->setStateDate(new \DateTime());
+            $orderHistory->setPriceIncludingVat($order->getPriceIncludingVat());
+            $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
+            $orderHistory->setNote("Transaction canceled by the user, transactionId=".$transaction->getId());
+            $order->addOrderHistory($orderHistory);
+            $order->setStateFromHistory();
+            $em->flush();
+
+            $event = new ShopEvent();
+            $event->set("transaction", $transaction);
+            $event->set("order", $order);
+            $event->set("orderHistory", $orderHistory);
+            $this->dispatcher->dispatch(KitpagesShopEvents::AFTER_ORDER_CANCELED, $event);
+
+            return;
+        }
+
         $orderHistory = new OrderHistory();
         $orderHistory->setUsername("payment-notification");
         $orderHistory->setOrder($order);
