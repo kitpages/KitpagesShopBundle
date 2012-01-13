@@ -61,59 +61,77 @@ class OrderController extends Controller
             return new Response('You are not allowed to see this order');
         }
 
-        $em = $this->getDoctrine()->getEntityManager();
+        // modify ready_to_pay or created orders (and not payed or canceled orders)
+        if (
+            ($order->getState() == OrderHistory::STATE_READY_TO_PAY) ||
+            ($order->getState() == OrderHistory::STATE_CREATED)
+        ) {
 
-        if ($order->getUsername() == null) {
-            $order->setUsername($this->get('security.context')->getToken()->getUsername());
+            $em = $this->getDoctrine()->getEntityManager();
+
+            if ($order->getUsername() == null) {
+                $order->setUsername($this->get('security.context')->getToken()->getUsername());
+            }
+            if ($invoiceUser instanceof OrderUser) {
+                $order->setInvoiceUser($invoiceUser);
+                $invoiceUser->setInvoiceOrder($order);
+            }
+            if ($shippingUser instanceof OrderUser) {
+                $order->setShippingUser($shippingUser);
+                $shippingUser->setShippingOrder($order);
+            }
+
+            // calculate VAT
+            $orderManager = $this->get('kitpages_shop.orderManager');
+            $orderManager->addVat($order);
+
+            // complete order
+            $orderHistory = new OrderHistory();
+            $orderHistory->setUsername($this->get('security.context')->getToken()->getUsername());
+            $orderHistory->setOrder($order);
+            $orderHistory->setState(OrderHistory::STATE_READY_TO_PAY);
+            $orderHistory->setNote("order complete and displayed to the user");
+            $orderHistory->setStateDate(new \DateTime());
+            $orderHistory->setPriceIncludingVat($order->getPriceIncludingVat());
+            $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
+            $order->addOrderHistory($orderHistory);
+            $em->flush(); // hack in order to have an id in the orderHistory...
+            $order->setStateFromHistory();
+
+            // build transaction
+            $transaction = new Transaction(
+                $order->getId(),
+                $order->getPriceIncludingVat(),
+                new \DateTime(),
+                "EUR",
+                $order->getInvoiceUser()->getCountryCode()
+            );
+            $em->persist($transaction);
+            $em->flush();
+
+            // generate link
+            $linkToPayment = $this->getPaymentSystem()->renderLinkToPayment($transaction);
+
+            return $this->render(
+                'KitpagesShopBundle:Order:displayOrder.html.twig',
+                array(
+                    'order' => $order,
+                    'linkToPayment' => $linkToPayment
+                )
+            );
         }
-        if ($invoiceUser instanceof OrderUser) {
-            $order->setInvoiceUser($invoiceUser);
-            $invoiceUser->setInvoiceOrder($order);
+        // don't touch payed or canceled order
+        if (
+            ($order->getState() == OrderHistory::STATE_PAYED) ||
+            ($order->getState() == OrderHistory::STATE_CANCELED)
+        ) {
+            return $this->render(
+                'KitpagesShopBundle:Order:displayOrder.html.twig',
+                array(
+                    'order' => $order
+                )
+            );
         }
-        if ($shippingUser instanceof OrderUser) {
-            $order->setShippingUser($shippingUser);
-            $shippingUser->setShippingOrder($order);
-        }
-
-        // calculate VAT
-        $orderManager = $this->get('kitpages_shop.orderManager');
-        $orderManager->addVat($order);
-
-        // complete order
-        $orderHistory = new OrderHistory();
-        $orderHistory->setUsername($this->get('security.context')->getToken()->getUsername());
-        $orderHistory->setOrder($order);
-        $orderHistory->setState(OrderHistory::STATE_READY_TO_PAY);
-        $orderHistory->setNote("order complete and displayed to the user");
-        $orderHistory->setStateDate(new \DateTime());
-        $orderHistory->setPriceIncludingVat($order->getPriceIncludingVat());
-        $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
-        $order->addOrderHistory($orderHistory);
-        $em->flush(); // hack in order to have an id in the orderHistory...
-        $order->setStateFromHistory();
-
-        // build transaction
-        $transaction = new Transaction(
-            $order->getId(),
-            $order->getPriceIncludingVat(),
-            new \DateTime(),
-            "EUR",
-            $order->getInvoiceUser()->getCountryCode()
-        );
-        $em->persist($transaction);
-        $em->flush();
-
-        // generate link
-        $linkToPayment = $this->getPaymentSystem()->renderLinkToPayment($transaction);
-
-        return $this->render(
-            'KitpagesShopBundle:Order:displayOrder.html.twig',
-            array(
-                'order' => $order,
-                'linkToPayment' => $linkToPayment
-            )
-        );
-
     }
 
     public function termsAction()
