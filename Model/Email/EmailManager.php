@@ -67,17 +67,20 @@ class EmailManager
             return;
         }
         $order = $event->get("order");
+        $transaction = $event->get("transaction");
 
         $subject = $this->templating->render(
             "KitpagesShopBundle:Email:afterOrderPayedSubject.html.twig",
             array(
-                "order" => $order
+                "order" => $order,
+                "transaction" => $transaction
             )
         );
         $body = $this->templating->render(
             "KitpagesShopBundle:Email:afterOrderPayedBody.html.twig",
             array(
-                "order" => $order
+                "order" => $order,
+                "transaction" => $transaction
             )
         );
 

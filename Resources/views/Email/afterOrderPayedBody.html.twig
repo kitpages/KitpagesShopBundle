@@ -1,5 +1,14 @@
 {% extends 'KitpagesShopBundle:Email:layout.html.twig' %}
 {% block body %}
-{{ "Thank you for your order" }}
-{{ "Order" | trans }} {{order.id}}
+{{ "Dear %name%" | trans ({'%name%': order.invoiceUser.firstName ~ ' ' ~ order.invoiceUser.lastName}) }},<br/>
+<br/>
+{{ "Thank you for your purchase, your order has now been completed." | trans }}<br/>
+<br/>
+{{ "Your order number is: %orderId%" | trans({'%orderId%':order.id}) }}<br/>
+<br/>
+{{ "You can see your invoice" | trans}} :
+    <a href="{{ url("KitpagesShopBundle_invoice_invoiceDisplay", {"orderId":order.id}) }}">{{ url("KitpagesShopBundle_invoice_invoiceDisplay", {"orderId":order.id}) }}</a><br/>
+<br/>
+{{ "Best Regards" }}<br/>
+
 {% endblock body %}
