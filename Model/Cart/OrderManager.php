@@ -226,6 +226,7 @@ class OrderManager
             $invoice = new Invoice();
             $invoice->setOrder($order);
             $invoice->setReference(null);
+            $order->setInvoice($invoice);
             $em->persist($invoice);
             $em->flush();
             // invoice generation step 2 (html and reference generation)
