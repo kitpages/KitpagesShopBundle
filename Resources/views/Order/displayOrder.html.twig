@@ -36,24 +36,32 @@
     </tfoot>
 </table>
 
-<div class="kitpages-shop-payment-system">
-    <input class="kitpages-shop-payment-system-terms" type="checkbox" value="YES"/>
-    {{ "I confirm I have read and accept the " | trans }}
-    <a href="{{path("KitpagesShopBundle_order_terms")}}" target="_blank">{{"General Terms and Conditions" | trans }}</a>
+{% if (order.state == constant('\\Kitpages\\ShopBundle\\Entity\\OrderHistory::STATE_READY_TO_PAY')) %}
+    <div class="kitpages-shop-payment-system">
+        <input class="kitpages-shop-payment-system-terms" type="checkbox" value="YES"/>
+        {{ "I confirm I have read and accept the " | trans }}
+        <a href="{{path("KitpagesShopBundle_order_terms")}}" target="_blank">{{"General Terms and Conditions" | trans }}</a>
 
-    <div class="kit-shop-order-button">
+        <div class="kit-shop-order-button">
+        </div>
     </div>
-</div>
-<script>
-    // WARNING : don't use show and hide. Payments have to be hidden event if JS and CSS are desactivated.
-    (function() {
-        $(".kitpages-shop-payment-system-terms").click(function() {
-            var el = $(this);
-            if (el.attr('checked')) {
-                $(".kit-shop-order-button").html('{{ linkToPayment | raw | escape("js") }}');
-            } else {
-                $(".kit-shop-order-button").html('');
-            }
-        });
-    })();
-</script>
+    <script>
+        // WARNING : don't use show and hide. Payments have to be hidden event if JS and CSS are desactivated.
+        (function() {
+            $(".kitpages-shop-payment-system-terms").click(function() {
+                var el = $(this);
+                if (el.attr('checked')) {
+                    $(".kit-shop-order-button").html('{{ linkToPayment | raw | escape("js") }}');
+                } else {
+                    $(".kit-shop-order-button").html('');
+                }
+            });
+        })();
+    </script>
+{% endif %}
+{% if (order.state == constant('\\Kitpages\\ShopBundle\\Entity\\OrderHistory::STATE_PAYED')) %}
+{{ "This order is payed" | trans }}
+{% endif %}
+{% if (order.state == constant('\\Kitpages\\ShopBundle\\Entity\\OrderHistory::STATE_CANCELED')) %}
+{{ "This order is canceled" | trans }}
+{% endif %}
