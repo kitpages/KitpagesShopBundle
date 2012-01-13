@@ -189,20 +189,20 @@ class OrderManager
         }
         // check transaction success
         if ($transaction->getSuccess() === false) {
-            throw new Exception("transaction failed, transactionId=".$transaction->getId());
+            throw new Exception("paymentListener : transaction failed, transactionId=".$transaction->getId());
         }
         // get order
         $em = $this->doctrine->getEntityManager();
         $repo = $em->getRepository("KitpagesShopBundle:Order");
         $order = $repo->find($transaction->getOrderId());
         if (! $order instanceof Order) {
-            throw new Exception("unknown order for transactionId=".$transaction->getId());
+            throw new Exception("paymentListener : unknown order for transactionId=".$transaction->getId());
         }
-        if ($order->getState() != OrderHistory::STATE_PAYED) {
+        if ($order->getState() == OrderHistory::STATE_PAYED) {
             $this->cartManager->getCart()->emptyCart();
         }
         if ($order->getState() != OrderHistory::STATE_READY_TO_PAY) {
-            $this->logger->info("orderId=".$order->getId()." not updated by payment process because state is not ready_to_pay");
+            $this->logger->info("paymentListener : orderId=".$order->getId()." not updated by payment process because state is not ready_to_pay");
             return;
         }
         // transaction status ok
@@ -217,6 +217,7 @@ class OrderManager
             $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
             $orderHistory->setNote("Transaction accepted by the bank, transactionId=".$transaction->getId());
             $order->addOrderHistory($orderHistory);
+            $em->flush(); // hack to have the historyId
             $order->setStateFromHistory();
             $em->flush();
             // empty cart
@@ -262,6 +263,7 @@ class OrderManager
             $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
             $orderHistory->setNote("Transaction canceled by the user, transactionId=".$transaction->getId());
             $order->addOrderHistory($orderHistory);
+            $em->flush(); // hack to have the historyId
             $order->setStateFromHistory();
             $em->flush();
 
