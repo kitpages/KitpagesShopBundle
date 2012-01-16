@@ -130,7 +130,8 @@ class OrderController extends Controller
             return $this->render(
                 'KitpagesShopBundle:Order:displayOrder.html.twig',
                 array(
-                    'order' => $order
+                    'order' => $order,
+                    'linkToPayment' => ''
                 )
             );
         }
