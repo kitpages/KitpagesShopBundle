@@ -1,0 +1,50 @@
+{% extends 'KitpagesShopBundle:Admin:layout.html.twig' %}
+
+{% block bodyAdmin %}
+<table class="kit-shop-admin-table">
+    <thead>
+        <tr>
+            <th>{{ 'id' | trans }}</th>
+            <th>{{ 'User' | trans }}</th>
+            <th>{{ 'Price ATI' | trans }}</th>
+            <th>{{ 'Price ET' | trans }}</th>
+            <th>{{ 'State' | trans }}</th>
+            <th>{{ 'State date' | trans }}</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orderList %}
+            <tr>
+                <td>
+                    <a href="{{ path(displayOrderRoute, {
+                                'orderId': order.id
+                            } ) }}">
+                        {{ order.id}}
+                    </a>
+                </td>
+                <td>{{ order.invoiceUser.lastName}} {{ order.invoiceUser.firstName}}</td>
+                <td>{{ order.priceIncludingVat}}</td>
+                <td>{{ order.priceWithoutVat}}</td>
+                <td>{{ order.state}}</td>
+                <td>{{ order.stateDate|date("Y-m-d H:i:s") }}</td>
+                <td>
+                    <a href="{{ path('KitpagesShopBundle_admin_orderHistory', {
+                                'id': order.id
+                            } ) }}">
+                        {{ 'history' | trans}}
+                    </a>
+                    {% if order.invoice != null %}
+                    <a href="{{ path('KitpagesShopBundle_invoice_invoiceDisplay', {
+                                'orderId': order.id
+                            } ) }}">
+                        {{ 'invoice' | trans}}
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+

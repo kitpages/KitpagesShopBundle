@@ -1,0 +1,62 @@
+{% extends 'KitpagesShopBundle:Admin:layout.html.twig' %}
+
+{% block bodyAdmin %}
+
+<h1>Order</h1>
+<table class="kit-shop-admin-table">
+    <tr>
+        <td>{{ 'id' | trans }}</td>
+        <td>
+            {{ order.id}}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ 'User' | trans }}</td>
+        <td>{{ order.invoiceUser.lastName}} {{ order.invoiceUser.firstName}}</td>
+    </tr>
+    <tr>
+        <td>{{ 'Price ATI' | trans }}</td>
+        <td>{{ order.priceIncludingVat}}</td>
+    </tr>
+    <tr>
+        <td>{{ 'Price ET' | trans }}</td>
+        <td>{{ order.priceWithoutVat}}</td>
+    </tr>
+    <tr>
+        <td>{{ 'State' | trans }}</td>
+        <td>{{ order.state}}</td>
+    </tr>
+    <tr>
+        <td>{{ 'State date' | trans }}</td>
+        <td>{{ order.stateDate|date("Y-m-d H:i:s") }}</td>
+    </tr>
+</table>
+<br />
+
+<table class="kit-shop-admin-table" id='kitCatalogAdminTable'>
+    <thead>
+        <tr>
+            <th>{{ 'User' | trans }}</th>
+            <th>{{ 'Price ATI' | trans }}</th>
+            <th>{{ 'Price ET' | trans }}</th>
+            <th>{{ 'State' | trans }}</th>
+            <th>{{ 'State date' | trans }}</th>
+            <th>{{ 'note' | trans }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for orderHistory in orderHistoryList %}
+            <tr>
+                <td>{{ orderHistory.username}}</td>
+                <td>{{ orderHistory.priceIncludingVat}}</td>
+                <td>{{ orderHistory.priceWithoutVat}}</td>
+                <td>{{ orderHistory.state}}</td>
+                <td>{{ orderHistory.stateDate|date("Y-m-d H:i:s") }}</td>
+                <td>{{ orderHistory.stateDate|date("Y-m-d H:i:s") }}</td>
+                <td>{{ orderHistory.note }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
