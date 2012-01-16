@@ -110,7 +110,9 @@ class OrderController extends Controller
             $em->flush();
 
             // generate link
-            $linkToPayment = $this->getPaymentSystem()->renderLinkToPayment($transaction);
+            $paymentSystemProxy = $this->get("kitano_payment.payment_system_proxy");
+            $paymentSystemProxy->setPaymentSystem($this->getPaymentSystem());
+            $linkToPayment = $paymentSystemProxy->renderLinkToPayment($transaction);
 
             return $this->render(
                 'KitpagesShopBundle:Order:displayOrder.html.twig',

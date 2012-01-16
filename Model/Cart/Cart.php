@@ -31,6 +31,9 @@ class Cart
         CartLineInterface $parentLine = null
     )
     {
+        // hack calls all methods of the cartable
+        $this->callCartableMethod($item);
+        // /hack
         $cartLine = $this->createEmptyCartLine();
         $cartLine->setCartable($item);
         $cartLine->setQuantity($quantity);
@@ -103,5 +106,22 @@ class Cart
     protected function createEmptyCartLine()
     {
         return new CartLine();
+    }
+
+    /**
+     * this method is an ugly hack that calls all the interfaces methods
+     * if $cartable is an orm proxy that is not completely
+     * @param CartableInterface $cartable
+     */
+    protected function callCartableMethod(CartableInterface $cartable)
+    {
+        $cartable->getShopReference();
+        $cartable->getShopName();
+        $cartable->getShopDescription();
+        $cartable->getShopData();
+        if ($cartable instanceof ProductInterface) {
+            $cartable->getShopWeight();
+            $cartable->getShopUnitPrice();
+        }
     }
 }
