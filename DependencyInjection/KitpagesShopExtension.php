@@ -37,6 +37,9 @@ class KitpagesShopExtension extends Extension
         $this->remapParameters($config, $container, array(
             'from_email'  => 'kitpages_shop.from_email'
         ));
+        $this->remapParameters($config, $container, array(
+            'invoice_email_list'  => 'kitpages_shop.invoice_email_list'
+        ));
 
     }
 

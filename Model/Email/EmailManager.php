@@ -39,13 +39,17 @@ class EmailManager
     /** @var null|string */
     protected $fromEmail = null;
 
+    /** @var array of emails */
+    protected $invoiceEmailList = array();
+
     public function __construct(
         Registry $doctrine,
         LoggerInterface $logger,
         \Swift_Mailer $mailer,
         EngineInterface $templating,
         EventDispatcherInterface $dispatcher,
-        $fromEmail
+        $fromEmail,
+        $invoiceEmailList
     )
     {
         $this->doctrine = $doctrine;
@@ -54,6 +58,7 @@ class EmailManager
         $this->dispatcher = $dispatcher;
         $this->mailer =  $mailer;
         $this->fromEmail = $fromEmail;
+        $this->invoiceEmailList = $invoiceEmailList;
     }
 
 
@@ -89,6 +94,22 @@ class EmailManager
             ->setTo($order->getInvoiceUser()->getEmail())
             ->setSubject($subject)
             ->setBody($body)
+            ->setContentType('text/html');
+        $this->mailer->send($message);
+
+        // mail to administrators with invoice
+        $invoiceSubject = $this->templating->render(
+            "KitpagesShopBundle:Email:afterOrderPayedInvoiceEmailSubject.html.twig",
+            array(
+                "order" => $order,
+                "transaction" => $transaction
+            )
+        );
+        $message = \Swift_Message::newInstance()
+            ->setFrom($this->fromEmail)
+            ->setTo($this->invoiceEmailList)
+            ->setSubject($invoiceSubject)
+            ->setBody($order->getInvoice()->getContentHtml())
             ->setContentType('text/html');
         $this->mailer->send($message);
 

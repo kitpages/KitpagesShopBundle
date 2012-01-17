@@ -42,6 +42,16 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('order_display_route_name')->cannotBeEmpty()->isRequired()->end()
                 ->booleanNode('is_cart_including_vat')->defaultTrue()->end()
                 ->scalarNode('from_email')->cannotBeEmpty()->isRequired()->end()
+                ->arrayNode('invoice_email_list')
+                    ->isRequired()
+                    ->requiresAtLeastOneElement()
+                    ->beforeNormalization()
+                        ->ifTrue(function($v){ return !is_array($v); })
+                        ->then(function($v){ return array($v); })
+                    ->end()
+                    ->prototype('scalar')->end()
+                ->end()
+
             ->end();
     }
 

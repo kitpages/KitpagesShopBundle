@@ -35,6 +35,7 @@
             <argument type="service" id="templating"/>
             <argument type="service" id="event_dispatcher"/>
             <argument>%kitpages_shop.from_email%</argument>
+            <argument>%kitpages_shop.invoice_email_list%</argument>
 
             <tag name="kernel.event_listener" event="kitpages_shop.event.after_order_payed" method="afterOrderPayedEvent" />
         </service>
