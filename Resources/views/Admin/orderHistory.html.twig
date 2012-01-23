@@ -41,6 +41,7 @@
     <thead>
         <tr>
             <th>{{"Ref"|trans}}</th>
+            <th>{{"Category"|trans}}</th>
             <th>{{"Name"|trans}}</th>
             <th>{{"Quantity"|trans}}</th>
             <th>{{"Price"|trans}}</th>
@@ -50,6 +51,7 @@
     {% for line in order.orderLineList %}
         <tr>
             <td>{{line.shopReference}}</td>
+            <td>{{line.shopCategory}}</td>
             <td>
                 <h4>{{line.shopName}}</h4>
                 <div>{{line.shopDescription}}</div>

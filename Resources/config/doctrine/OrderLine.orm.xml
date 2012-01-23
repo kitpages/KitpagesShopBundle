@@ -13,8 +13,10 @@
         <field name="quantity" column="quantity" type="integer"/>
         <field name="cartLineId" column="cart_line_id" type="integer" />
         <field name="cartParentLineId" column="cart_parent_line_id" type="integer" nullable="true" />
+        <field name="cartableClass" column="cartable_class" type="string" length="200" />
 
         <field name="shopReference" column="shop_reference" type="string" length="200" />
+        <field name="shopCategory" column="shop_category" type="string" length="200" />
         <field name="shopName" column="shop_name" type="string" length="250" />
         <field name="shopDescription" column="shop_description" type="string" length="2000" nullable="true"/>
         <field name="shopData" column="shop_data" type="array" nullable="true"/>

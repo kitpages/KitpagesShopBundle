@@ -115,6 +115,7 @@ class Cart
      */
     protected function callCartableMethod(CartableInterface $cartable)
     {
+        $cartable->getShopCategory();
         $cartable->getShopReference();
         $cartable->getShopName();
         $cartable->getShopDescription();

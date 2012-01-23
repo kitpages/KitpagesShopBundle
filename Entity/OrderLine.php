@@ -319,4 +319,54 @@ class OrderLine
     {
         return $this->shopData;
     }
+    /**
+     * @var string $cartableClass
+     */
+    private $cartableClass;
+
+    /**
+     * @var string $shopCategory
+     */
+    private $shopCategory;
+
+
+    /**
+     * Set cartableClass
+     *
+     * @param string $cartableClass
+     */
+    public function setCartableClass($cartableClass)
+    {
+        $this->cartableClass = $cartableClass;
+    }
+
+    /**
+     * Get cartableClass
+     *
+     * @return string 
+     */
+    public function getCartableClass()
+    {
+        return $this->cartableClass;
+    }
+
+    /**
+     * Set shopCategory
+     *
+     * @param string $shopCategory
+     */
+    public function setShopCategory($shopCategory)
+    {
+        $this->shopCategory = $shopCategory;
+    }
+
+    /**
+     * Get shopCategory
+     *
+     * @return string 
+     */
+    public function getShopCategory()
+    {
+        return $this->shopCategory;
+    }
 }

@@ -20,10 +20,15 @@ interface CartableInterface {
    * @return string description of the line in the cart
    */
   public function getShopDescription();
-    /**
-     * extra data saved by serialization in the database
-     * @return array elements given to the cart and serialized in the order
-     */
-    public function getShopData();
+  /**
+    * extra data saved by serialization in the database
+   * @return array elements given to the cart and serialized in the order
+   */
+  public function getShopData();
+  /**
+   * extra data saved by serialization in the database
+   * @return string name of the product category
+   */
+  public function getShopCategory();
 }
 ?>

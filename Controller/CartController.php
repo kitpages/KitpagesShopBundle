@@ -37,6 +37,7 @@ class CartController extends Controller
         );
         foreach ($cart->getLineList() as $line) {
             $displayCart['lineList'][$line->getId()] = array(
+                "shopCategory" => $line->getCartable()->getShopCategory(),
                 "shopName" => $line->getCartable()->getShopName(),
                 "shopDescription" => $line->getCartable()->getShopDescription(),
                 "shopReference" => $line->getCartable()->getShopReference(),

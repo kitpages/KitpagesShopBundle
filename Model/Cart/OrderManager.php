@@ -9,6 +9,7 @@ use Kitpages\ShopBundle\Entity\Invoice;
 use Kitpages\ShopBundle\Model\Cart\CartInterface;
 use Kitpages\ShopBundle\Event\ShopEvent;
 use Kitpages\ShopBundle\KitpagesShopEvents;
+use Kitpages\ShopBundle\Model\Cart\ProductInterface;
 
 use Kitano\PaymentBundle\Event\PaymentEvent;
 use Kitano\PaymentBundle\Model\Transaction;
@@ -94,10 +95,18 @@ class OrderManager
             $orderLine->setCartLineId($line->getId());
             $orderLine->setCartParentLineId($line->getParentLineId());
             $orderLine->setQuantity($line->getQuantity());
+            $orderLine->setShopCategory($line->getCartable()->getShopCategory());
             $orderLine->setShopName($line->getCartable()->getShopName());
             $orderLine->setShopDescription($line->getCartable()->getShopDescription());
             $orderLine->setShopData($line->getCartable()->getShopData());
             $orderLine->setShopReference($line->getCartable()->getShopReference());
+
+            if ($line->getCartable() instanceof ProductInterface) {
+                $orderLine->setCartableClass('product');
+            } else {
+                $orderLine->setCartableClass('other');
+            }
+
             if ($this->isCartIncludingVat) {
                 $orderLine->setPriceIncludingVat($this->cartManager->getLinePrice($line->getId()));
             } else {
