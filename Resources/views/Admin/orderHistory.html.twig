@@ -12,7 +12,7 @@
     </tr>
     <tr>
         <td>{{ 'User' | trans }}</td>
-        <td>{{ order.invoiceUser.lastName}} {{ order.invoiceUser.firstName}}</td>
+        <td>{% if order.invoiceUser %}{{ order.invoiceUser.lastName}} {{ order.invoiceUser.firstName}}{% endif %}</td>
     </tr>
     <tr>
         <td>{{ 'Price ATI' | trans }}</td>
@@ -51,7 +51,6 @@
                 <td>{{ orderHistory.priceIncludingVat}}</td>
                 <td>{{ orderHistory.priceWithoutVat}}</td>
                 <td>{{ orderHistory.state}}</td>
-                <td>{{ orderHistory.stateDate|date("Y-m-d H:i:s") }}</td>
                 <td>{{ orderHistory.stateDate|date("Y-m-d H:i:s") }}</td>
                 <td>{{ orderHistory.note }}</td>
             </tr>

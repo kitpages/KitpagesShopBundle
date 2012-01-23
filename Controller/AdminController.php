@@ -52,8 +52,6 @@ class AdminController extends Controller
                 $dataForm = $request->get('form');
                 $filter = trim($dataForm['filter']);
             }
-        } else {
-            $filter = OrderHistory::STATE_PAYED;
         }
         $queryOrderList = $em
             ->createQuery('
