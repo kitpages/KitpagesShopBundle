@@ -1,3 +1,6 @@
+{% extends "KitpagesShopBundle::layout.html.twig" %}
+
+{% block kitpages_shop_body %}
 <table>
     <thead>
         <tr>
@@ -29,3 +32,4 @@
 <div class="kit-shop-order-button">
     <a href="{{ path('KitpagesShopBundle_order_create') }}">Order</a>
 </div>
+{% endblock %}

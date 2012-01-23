@@ -18,7 +18,9 @@ class InvoiceController extends Controller
 {
     public function invoiceDisplayAction($orderId)
     {
-        if (! $this->get('security.context')->isGranted('ROLE_USER') ) {
+        if (
+            ! $this->get('security.context')->isGranted('ROLE_SHOP_USER')
+        ) {
             return new Response('The user should be authenticated on this page');
         }
         $doctrine = $this->get("doctrine");
@@ -47,11 +49,14 @@ class InvoiceController extends Controller
         OrderUser $shippingUser = null
     )
     {
-        if (! $this->get('security.context')->isGranted('ROLE_USER') ) {
+        if (
+            ! $this->get('security.context')->isGranted('ROLE_SHOP_USER')
+        ) {
             return new Response('The user should be authenticated on this page');
         }
 
         if (
+            ! $this->get('security.context')->isGranted('ROLE_SHOP_ADMIN') &&
             ($order->getUsername() != null) &&
             ($order->getUsername() != $this->get('security.context')->getToken()->getUsername())
         ) {

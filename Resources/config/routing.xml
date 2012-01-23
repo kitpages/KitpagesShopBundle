@@ -23,4 +23,7 @@
     <route id="KitpagesShopBundle_invoice_invoiceDisplay" pattern="/invoice/display/{orderId}">
         <default key="_controller">KitpagesShopBundle:Invoice:invoiceDisplay</default>
     </route>
+
+    <import resource="@KitpagesShopBundle/Resources/config/routing/admin.xml" prefix="/admin" />
+
 </routes>

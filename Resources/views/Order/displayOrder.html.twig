@@ -1,3 +1,6 @@
+{% extends "KitpagesShopBundle::layout.html.twig" %}
+
+{% block kitpages_shop_body %}
 <table>
     <thead>
         <tr>
@@ -65,3 +68,5 @@
 {% if (order.state == constant('\\Kitpages\\ShopBundle\\Entity\\OrderHistory::STATE_CANCELED')) %}
 {{ "This order is canceled" | trans }}
 {% endif %}
+
+{% endblock %}

@@ -1,9 +1,0 @@
-KitpagesShopBundle_admin_orderList:
-    pattern:  /orderList
-    defaults: { _controller: KitpagesShopBundle:Admin:orderList}
-
-KitpagesShopBundle_admin_orderHistory:
-    pattern:  /orderHistory/{id}
-    defaults: { _controller: KitpagesShopBundle:Admin:orderHistory}
-    requirements:
-        id: \d+

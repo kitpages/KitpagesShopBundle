@@ -1,0 +1,26 @@
+{% if paginator.totalPageCount > 1 %}
+<div class="kit-shop-paginator">
+    {% if paginator.previousButtonPage %}
+        <span class="kit-shop-paginator-previous">
+            <a href="{{ paginator.urlTemplate|replace({'_PAGE_':paginator.previousButtonPage}) }}">&lt;</a>
+        </span>
+    {% endif %}
+
+    {% for page in paginator.pageRange %}
+        {% if page != paginator.currentPage %}
+            <span class="kit-shop-paginator-page">
+                <a href="{{ paginator.urlTemplate|replace({'_PAGE_':page}) }}">{{ page }}</a>
+            </span>
+        {% else %}
+            <span class="kit-shop-paginator-current">{{ page }}</span>
+        {% endif %}
+
+    {% endfor %}
+
+    {% if paginator.nextButtonPage %}
+        <span class="kit-shop-paginator-next">
+            <a href="{{ paginator.urlTemplate|replace({'_PAGE_':paginator.nextButtonPage}) }}">&gt;</a>
+        </span>
+    {% endif %}
+</div>
+{% endif %}

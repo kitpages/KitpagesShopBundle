@@ -1,0 +1,35 @@
+/************************Table product list****************/
+
+/* tables */
+table.kit-shop-admin-table {
+    margin-top:20px;
+    font-family:arial;
+    margin:10px 0px 15px 0px;
+    font-size: 9pt;
+    width: 100%;
+    text-align: left;
+}
+table.kit-shop-admin-table thead tr th {
+    background-color: #E3E3E3;
+    border: 1px solid #000;
+    font-size: 10pt;
+    padding: 4px;
+}
+
+table.kit-shop-admin-table tbody td {
+    color: #313131;
+    padding: 4px;
+    vertical-align: top;
+    border: 1px solid #000;
+    background-color: #F0F0F0;
+}
+table.kit-shop-admin-table tbody tr:hover td {
+    background-color: #FFFF80;
+}
+.kit-shop-admin-table a{
+    text-decoration:none;
+}
+
+
+
+

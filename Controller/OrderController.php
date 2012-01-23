@@ -25,7 +25,9 @@ class OrderController extends Controller
         // create order from cart
         $order = $orderManager->createOrder();
         $order->setLocale($this->get('session')->getLocale());
-        if($this->get('security.context')->isGranted('ROLE_USER')) {
+        if(
+            $this->get('security.context')->isGranted('ROLE_SHOP_USER')
+        ) {
             $order->setUsername($this->get('security.context')->getToken()->getUsername());
         }
         // persist order
@@ -50,11 +52,14 @@ class OrderController extends Controller
         OrderUser $shippingUser = null
     )
     {
-        if (! $this->get('security.context')->isGranted('ROLE_USER') ) {
+        if (
+            ! $this->get('security.context')->isGranted('ROLE_SHOP_USER')
+        ) {
             return new Response('The user should be authenticated on this page');
         }
 
         if (
+            ! $this->get('security.context')->isGranted('ROLE_SHOP_ADMIN') &&
             ($order->getUsername() != null) &&
             ($order->getUsername() != $this->get('security.context')->getToken()->getUsername())
         ) {

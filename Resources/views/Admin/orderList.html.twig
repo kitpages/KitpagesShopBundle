@@ -1,6 +1,15 @@
-{% extends 'KitpagesShopBundle:Admin:layout.html.twig' %}
+{% extends "KitpagesShopBundle::layout.html.twig" %}
 
-{% block bodyAdmin %}
+{% block kitpages_shop_body %}
+
+<div class="kit-shop-admin-filter">
+    <form action="{{ path('KitpagesShopBundle_admin_orderList' ) }}" method="get" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+
+        <input type="submit" />
+    </form>
+</div>
+
 <table class="kit-shop-admin-table">
     <thead>
         <tr>
@@ -16,29 +25,28 @@
     <tbody>
         {% for order in orderList %}
             <tr>
-                <td>
-                    <a href="{{ path(displayOrderRoute, {
-                                'orderId': order.id
-                            } ) }}">
-                        {{ order.id}}
-                    </a>
-                </td>
-                <td>{{ order.invoiceUser.lastName}} {{ order.invoiceUser.firstName}}</td>
+                <td>{{ order.id}}</td>
+                <td>{% if order.invoiceUser != null %}{{ order.invoiceUser.lastName}} {{ order.invoiceUser.firstName}}{% endif %}</td>
                 <td>{{ order.priceIncludingVat}}</td>
                 <td>{{ order.priceWithoutVat}}</td>
                 <td>{{ order.state}}</td>
                 <td>{{ order.stateDate|date("Y-m-d H:i:s") }}</td>
                 <td>
+                    <a href="{{ path(displayOrderRoute, {
+                                'orderId': order.id
+                            } ) }}">
+                        <img src="{{asset("bundles/kitpagesshop/icon/edit.png")}}">
+                    </a>
                     <a href="{{ path('KitpagesShopBundle_admin_orderHistory', {
                                 'id': order.id
                             } ) }}">
-                        {{ 'history' | trans}}
+                        <img src="{{asset("bundles/kitpagesshop/icon/history.png")}}">
                     </a>
                     {% if order.invoice != null %}
                     <a href="{{ path('KitpagesShopBundle_invoice_invoiceDisplay', {
                                 'orderId': order.id
                             } ) }}">
-                        {{ 'invoice' | trans}}
+                        <img src="{{asset("bundles/kitpagesshop/icon/invoice.png")}}">
                     </a>
                     {% endif %}
                 </td>
@@ -46,5 +54,6 @@
         {% endfor %}
     </tbody>
 </table>
+{{paginatorHtml|raw}}
 {% endblock %}
 
