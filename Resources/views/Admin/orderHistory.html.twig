@@ -2,6 +2,8 @@
 
 {% block kitpages_shop_body %}
 
+<div class="kit-shop-admin-order-history" >
+
 <h1>Order N° {{ order.id}}</h1>
 
 <h2>Order</h2>
@@ -33,7 +35,6 @@
         <td>{{ order.stateDate|date("Y-m-d H:i:s") }}</td>
     </tr>
 </table>
-<br />
 
 <h2>Order Content</h2>
 <table class="kit-shop-admin-table">
@@ -71,7 +72,6 @@
         </tr>
     </tbody>
 </table>
-<br />
 
 <h2>Order History</h2>
 <table class="kit-shop-admin-table">
@@ -98,5 +98,8 @@
         {% endfor %}
     </tbody>
 </table>
+
+</div>
+
 {% endblock %}
 

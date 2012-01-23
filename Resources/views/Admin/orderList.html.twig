@@ -34,14 +34,14 @@
                 <td>
                     <a href="{{ path('KitpagesShopBundle_admin_orderHistory', {
                                 'id': order.id
-                            } ) }}">
-                        <img src="{{asset("bundles/kitpagesshop/icon/history.png")}}">
+                            } ) }}" title="display order" >
+                        <img src="{{asset("bundles/kitpagesshop/icon/history.png")}}" alt="display order">
                     </a>
                     {% if order.invoice != null %}
                     <a href="{{ path('KitpagesShopBundle_invoice_invoiceDisplay', {
                                 'orderId': order.id
-                            } ) }}">
-                        <img src="{{asset("bundles/kitpagesshop/icon/invoice.png")}}">
+                            } ) }}" title="display invoice" >
+                        <img src="{{asset("bundles/kitpagesshop/icon/invoice.png")}}" alt="display invoice">
                     </a>
                     {% endif %}
                 </td>
