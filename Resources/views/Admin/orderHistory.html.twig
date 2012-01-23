@@ -2,7 +2,9 @@
 
 {% block kitpages_shop_body %}
 
-<h1>Order</h1>
+<h1>Order N° {{ order.id}}</h1>
+
+<h2>Order</h2>
 <table class="kit-shop-admin-table">
     <tr>
         <td class="kit-shop-admin-table-title">{{ 'id' | trans }}</td>
@@ -33,6 +35,7 @@
 </table>
 <br />
 
+<h2>Order Content</h2>
 <table class="kit-shop-admin-table">
     <thead>
         <tr>
@@ -70,7 +73,7 @@
 </table>
 <br />
 
-
+<h2>Order History</h2>
 <table class="kit-shop-admin-table">
     <thead>
         <tr>
