@@ -9,11 +9,12 @@ table.kit-shop-admin-table {
     width: 100%;
     text-align: left;
 }
-table.kit-shop-admin-table thead tr th {
-    background-color: #E3E3E3;
-    border: 1px solid #000;
-    font-size: 10pt;
+table.kit-shop-admin-table thead tr th, table.kit-shop-admin-table .kit-shop-admin-table-title {
     padding: 4px;
+    border: 1px solid #000;
+    font-weight:bold;
+    font-size: 10pt;
+    background-color: #E3E3E3;
 }
 
 table.kit-shop-admin-table tbody td {

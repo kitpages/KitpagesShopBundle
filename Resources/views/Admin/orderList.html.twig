@@ -32,11 +32,6 @@
                 <td>{{ order.state}}</td>
                 <td>{{ order.stateDate|date("Y-m-d H:i:s") }}</td>
                 <td>
-                    <a href="{{ path(displayOrderRoute, {
-                                'orderId': order.id
-                            } ) }}">
-                        <img src="{{asset("bundles/kitpagesshop/icon/edit.png")}}">
-                    </a>
                     <a href="{{ path('KitpagesShopBundle_admin_orderHistory', {
                                 'id': order.id
                             } ) }}">

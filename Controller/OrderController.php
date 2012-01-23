@@ -59,7 +59,6 @@ class OrderController extends Controller
         }
 
         if (
-            ! $this->get('security.context')->isGranted('ROLE_SHOP_ADMIN') &&
             ($order->getUsername() != null) &&
             ($order->getUsername() != $this->get('security.context')->getToken()->getUsername())
         ) {

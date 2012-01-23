@@ -5,35 +5,73 @@
 <h1>Order</h1>
 <table class="kit-shop-admin-table">
     <tr>
-        <td>{{ 'id' | trans }}</td>
+        <td class="kit-shop-admin-table-title">{{ 'id' | trans }}</td>
         <td>
             {{ order.id}}
         </td>
     </tr>
     <tr>
-        <td>{{ 'User' | trans }}</td>
+        <td class="kit-shop-admin-table-title">{{ 'User' | trans }}</td>
         <td>{% if order.invoiceUser %}{{ order.invoiceUser.lastName}} {{ order.invoiceUser.firstName}}{% endif %}</td>
     </tr>
     <tr>
-        <td>{{ 'Price ATI' | trans }}</td>
+        <td class="kit-shop-admin-table-title">{{ 'Price ATI' | trans }}</td>
         <td>{{ order.priceIncludingVat}}</td>
     </tr>
     <tr>
-        <td>{{ 'Price ET' | trans }}</td>
+        <td class="kit-shop-admin-table-title">{{ 'Price ET' | trans }}</td>
         <td>{{ order.priceWithoutVat}}</td>
     </tr>
     <tr>
-        <td>{{ 'State' | trans }}</td>
+        <td class="kit-shop-admin-table-title">{{ 'State' | trans }}</td>
         <td>{{ order.state}}</td>
     </tr>
     <tr>
-        <td>{{ 'State date' | trans }}</td>
+        <td class="kit-shop-admin-table-title">{{ 'State date' | trans }}</td>
         <td>{{ order.stateDate|date("Y-m-d H:i:s") }}</td>
     </tr>
 </table>
 <br />
 
-<table class="kit-shop-admin-table" id='kitCatalogAdminTable'>
+<table class="kit-shop-admin-table">
+    <thead>
+        <tr>
+            <th>{{"Ref"|trans}}</th>
+            <th>{{"Name"|trans}}</th>
+            <th>{{"Quantity"|trans}}</th>
+            <th>{{"Price"|trans}}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for line in order.orderLineList %}
+        <tr>
+            <td>{{line.shopReference}}</td>
+            <td>
+                <h4>{{line.shopName}}</h4>
+                <div>{{line.shopDescription}}</div>
+            </td>
+            <td>{{line.quantity}}</td>
+            <td>{{ line.priceIncludingVat }}</td>
+        </tr>
+    {% endfor %}
+        <tr>
+            <td class="kit-shop-admin-table-title" colspan="3">{{"Total"|trans}}</td>
+            <td>
+                {% if (order.priceIncludingVat == order.priceWithoutVat) %}
+                    {{order.priceIncludingVat}}
+                {% else %}
+                    {{ "Without VAT" | trans }}: {{order.priceWithoutVat}}<br/>
+                    {{ "VAT" | trans }} : {{order.priceIncludingVat - order.priceWithoutVat}}<br/>
+                    {{ "Including VAT" | trans }} : {{order.priceIncludingVat}}
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br />
+
+
+<table class="kit-shop-admin-table">
     <thead>
         <tr>
             <th>{{ 'User' | trans }}</th>
