@@ -13,5 +13,8 @@
         <requirement key="id">\d+</requirement>
     </route>
 
+    <route id="KitpagesShopBundle_admin_statistics" pattern="/stats">
+        <default key="_controller">KitpagesShopBundle:Statistics:index</default>
+    </route>
 
 </routes>

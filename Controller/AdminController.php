@@ -44,7 +44,6 @@ class AdminController extends Controller
         $form = $builder->getForm();
 
         $em = $this->getDoctrine()->getEntityManager();
-        $em->getConfiguration()->setSQLLogger(new \Doctrine\DBAL\Logging\EchoSQLLogger());
         $filter = '';
         if ($request->getMethod() == 'GET') {
             $form->bindRequest($request);

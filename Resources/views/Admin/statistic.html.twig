@@ -1,0 +1,22 @@
+{% extends "KitpagesShopBundle::layout.html.twig" %}
+
+{% block kitpages_shop_body %}
+
+<div class="kit-shop-admin-filter">
+    <form action="{{ path('KitpagesShopBundle_admin_statistics' ) }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+
+        <input type="submit" />
+    </form>
+</div>
+
+
+<h2>Sales total per month</h2>
+{% include 'KitpagesShopBundle:Admin/graph:graphRect.html.twig' with {'dataStatistic': dataStatisticList.salesPerMonth, 'id': 'salesPerMonth', 'canvasWidth': 500, 'canvasHeight':400} %}
+<h2>Sales total per day</h2>
+{% include 'KitpagesShopBundle:Admin/graph:graphRect.html.twig' with {'dataStatistic': dataStatisticList.salesPerDay, 'id': 'salesPerDay', 'canvasWidth': 900, 'canvasHeight':400} %}
+<h2>Top ten</h2>
+{% include 'KitpagesShopBundle:Admin/graph:graphCirc.html.twig' with {'dataStatistic': dataStatisticList.salesTopTen, 'id': 'salesTopTen', 'canvasWidth': 900, 'canvasHeight':400} %}
+<h2>Top ten quantity</h2>
+{% include 'KitpagesShopBundle:Admin/graph:graphCirc.html.twig' with {'dataStatistic': dataStatisticList.salesTopTenQuantity, 'id': 'salesTopTenQuantity', 'canvasWidth': 900, 'canvasHeight':400} %}
+{% endblock %}

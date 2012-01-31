@@ -31,6 +31,10 @@ table.kit-shop-admin-table tbody tr:hover td {
     text-decoration:none;
 }
 
+.kit-shop-admin-filter #form_date_day{
+    display:none;
+}
+
 
 
 

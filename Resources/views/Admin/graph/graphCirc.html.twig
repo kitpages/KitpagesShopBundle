@@ -1,0 +1,106 @@
+<script>
+	function pie_chart() {
+
+		var canvas = document.getElementById('{{id}}');
+		var context = canvas.getContext('2d');
+
+
+        // Data
+        var keyList = [];
+        var valueList = [];
+        var percentageList = [];
+        var valueTotal = 0;
+        {% for key, data in dataStatistic %}
+            keyList.push('{{key}}');
+            valueList.push('{{data}}');
+            valueTotal = valueTotal + {{data}};
+        {% endfor %}
+
+
+		var diameter = Math.min(canvas.height, canvas.width) - 100;
+		var radius = diameter / 2;
+
+		// center pie
+		var position_x = radius + 20;
+		var position_y = canvas.height / 2 + 20;
+
+		var nb_data = valueList.length;
+		var angle_init = 0;
+		var stylecolors = [
+            'rgb(0,255,255)', 'rgb(255,0,255)', 'rgb(255,255,0)', 'rgb(0,0,255)', 'rgb(0,255,0)', 'rgb(255,0,0)',
+            'rgb(205,183,158)', 'rgb(0,0,0)', 'rgb(238,121,66)', 'rgb(255,181,197)', 'rgb(205,155,29)',
+            'rgb(184,134,11)', 'rgb(240,255,255)'
+        ];
+
+		var width_rect = 15;
+
+        //DrawCircle(context,position_x,position_y,radius,'rgb(0,0,0)');
+
+
+		for(var i=0;i<nb_data; i++) {
+            percentageValue = Math.round(valueList[i]/valueTotal*100);
+            percentageList.push(percentageValue);
+			var angle_degree = (percentageValue / 100) * 360;// conversion percentage -> degree
+            DrawArc(context,position_x,position_y,radius,angle_init,angle_degree,stylecolors[i]);
+			angle_init += angle_degree;
+
+            DrawRectangle(
+				context,
+                    diameter + 30,
+				(width_rect + 3) * (i + 1),
+                    width_rect,width_rect,
+				stylecolors[i]
+			);
+			context.font = '9pt Tahoma';//legendes
+			context.fillStyle = '#000';//legendes
+			context.fillText(keyList[i] + ', ' + percentageList[i] +' % (' + valueList[i] + ')',diameter + 55,18 * i+30);//legendes
+		}
+
+
+
+	}
+
+    function DrawCircle(context,position_x,position_y,radius,couleurs) {
+        context.beginPath();
+
+        context.arc(position_x,position_y, radius, 0, 2 * Math.PI, false);
+        context.fillStyle = couleurs;
+        context.fill();
+        context.lineWidth = 5;
+        context.strokeStyle = "black";
+        context.shadowColor = "#bbbbbb";
+        context.shadowBlur = 2;
+        context.shadowOffsetX = 5;
+        context.shadowOffsetY = 5;
+        context.stroke();
+        context.closePath();
+        context.fill();
+    }
+
+	function DrawRectangle(context,x0,y0,xl,yl,coloration) {
+		context.beginPath();
+		context.fillStyle = coloration;
+		context.fillRect(x0,y0,xl,yl);
+		context.closePath();
+		context.fill();
+	}
+	function DrawArc(context,position_x,position_y,radius,angle_initial,angle_degree,color) {
+		context.beginPath();
+		context.fillStyle  = color;
+		var angle_initial_radian = angle_initial / (180 / Math.PI);// conversion degree -> radian
+		var angle_radian = angle_degree / (180 / Math.PI);// conversion degree -> radian
+		context.arc(position_x,position_y,radius,angle_initial_radian,angle_initial_radian + angle_radian,0);
+		context.lineTo(position_x, position_y);
+		context.closePath();
+		context.fill();
+	}
+
+	window.addEventListener("load", pie_chart, false);
+
+</script>
+<style type="text/css">
+	canvas {
+		border: 3px solid #444;
+	}
+</style>
+<canvas id="{{id}}" width="{{canvasWidth}}" height="{{canvasHeight}}"></canvas>

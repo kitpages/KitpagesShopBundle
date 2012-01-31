@@ -1,0 +1,134 @@
+<script>
+	function Bar_chart() {
+		var canvas = document.getElementById('{{id}}');
+		var context = canvas.getContext('2d');
+
+		// Data
+        var keyList = [];
+        var valueList = [];
+        {% for key, data in dataStatistic %}
+            keyList.push('{{key}}');
+            valueList.push('{{data}}');
+        {% endfor %}
+
+        var max_value_list = Math.max.apply( Math, valueList );
+        max_value_list = Math.ceil(max_value_list/10)*10;
+
+		// origin of the coordinate
+        var orgX = 100;
+        var orgY = canvas.height-50;
+		context.translate(orgX,orgY);
+
+
+        // shadow
+        context.shadowColor = "#bbbbbb";
+        context.shadowBlur = 2;
+        context.shadowOffsetX = 5;
+        context.shadowOffsetY = 5;
+
+
+
+		var width_bar = 20;
+		context.lineWidth = '1.0';
+
+		// Color and width for Y axis and X axis
+		context.fillStyle = '#000';
+		context.lineWidth = '1.0';
+
+		// Y axis
+        line (context,0,0,0,-orgY+30);
+        line (context,0-8,-orgY+45,0,-orgY+30);
+        line (context,0+8,-orgY+45,0,-orgY+30);
+
+		context.textAlign = 'center';
+		context.font = '8pt Tahoma';
+
+
+        var px_by_value_graduation = (orgY-30)/max_value_list;
+
+
+        // each scale is spaced 20 pixels
+        nbr_graduation = Math.ceil((orgY-30)/20);
+
+        // calculating the gap in value between two graduation
+        var gap_graduation = Math.round(max_value_list/nbr_graduation);
+        gap_graduation = gap_graduation + "";
+        // order of magnitude
+        var div = 1;
+        for (var i=1; i<gap_graduation.length; i++) {
+            div = 10*div;
+        }
+        gap_graduation =  Math.round(gap_graduation/div)*div;
+
+
+
+		var gap_graduation_px = gap_graduation*px_by_value_graduation;
+        var graduation = 0;
+        var next_graduation = 0;
+
+
+        // graduation Y-axis
+		for (var i=0; next_graduation<max_value_list; i++) {
+
+            line (context,0-3,-gap_graduation_px*(i),0+3,-gap_graduation_px*(i));
+			graduation = gap_graduation*i;
+            next_graduation = gap_graduation*(i+1);
+			context.fillText(graduation, -gap_graduation_px, (4-gap_graduation_px*i));
+		}
+		context.fillText('Total without vat', -orgX+50, -orgY+30);
+
+		context.textAlign = 'left';
+		context.fillText('Date', canvas.width - 260, 40);
+
+		context.lineWidth = '1.0';
+
+		for (i=0; i<valueList.length; i++) {
+
+            // draw bar
+            var coordX = 10 + (i * width_bar) +5*i;
+            DrawRectangle(
+                context,
+                coordX,
+                -1 - valueList[i]*px_by_value_graduation,
+                    width_bar,
+                valueList[i]*px_by_value_graduation,
+                'grey'
+            );
+
+            // modify color for the text
+			context.fillStyle = '#000';
+
+			var width_texte = context.measureText(keyList [i]).width;
+			var center_texte = (width_bar - width_texte)/2;
+			context.fillText(keyList[i], 10 +center_texte + (i * width_bar) + 5*i, 18);
+		}
+
+
+
+        // X-axis
+        line (context,0,0,coordX+width_bar,0);
+	}
+	// draw a line
+	function line (ctx,x1,y1,x2,y2)  {
+		ctx.beginPath();
+		ctx.moveTo(x1, y1);
+		ctx.lineTo(x2, y2);
+		ctx.closePath();
+		ctx.stroke();
+	}
+
+    function DrawRectangle(context,x0,y0,xl,yl,coloration) {
+   		context.beginPath();
+   		context.fillStyle = coloration;
+   		context.fillRect(x0,y0,xl,yl);
+   		context.closePath();
+   	}
+
+	window.addEventListener('load', Bar_chart, false);
+</script>
+<style type="text/css">
+	canvas {
+		border: 3px solid #444;
+	}
+</style>
+<canvas id="{{id}}" width="{{canvasWidth}}" height="{{canvasHeight}}"></canvas>
