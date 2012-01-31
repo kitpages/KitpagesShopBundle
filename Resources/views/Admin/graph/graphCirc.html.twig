@@ -43,7 +43,7 @@
 
 
 		for(var i=0;i<nb_data; i++) {
-            percentageValue = Math.round(valueList[i]/valueTotal*100);
+            var percentageValue = Math.round(valueList[i]/valueTotal*100);
             percentageList.push(percentageValue);
 			var angle_degree = (percentageValue / 100) * 360;// conversion percentage -> degree
             context.shadowColor = 'rgba(0,0,0,0)';
@@ -103,6 +103,7 @@
 </script>
 <style type="text/css">
 	canvas {
+        background-color:#FFFFFF;
 		border: 3px solid #444;
 	}
 </style>

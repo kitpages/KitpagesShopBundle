@@ -48,7 +48,7 @@
 
 
         // each scale is spaced 20 pixels
-        nbr_graduation = Math.ceil((orgY-30)/20);
+        var nbr_graduation = Math.ceil((orgY-30)/20);
 
         // calculating the gap in value between two graduation
         var gap_graduation = Math.round(max_value_list/nbr_graduation);
@@ -128,6 +128,7 @@
 </script>
 <style type="text/css">
 	canvas {
+        background-color:#FFFFFF;
 		border: 3px solid #444;
 	}
 </style>
