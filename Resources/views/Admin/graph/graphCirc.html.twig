@@ -34,16 +34,26 @@
 
 		var width_rect = 15;
 
-        //DrawCircle(context,position_x,position_y,radius,'rgb(0,0,0)');
+        context.strokeStyle = "black";
+        context.shadowColor = "#bbbbbb";
+        context.shadowBlur = 2;
+        context.shadowOffsetX = 5;
+        context.shadowOffsetY = 5;
+        DrawCircle(context,position_x,position_y,radius,'rgb(0,0,0)');
 
 
 		for(var i=0;i<nb_data; i++) {
             percentageValue = Math.round(valueList[i]/valueTotal*100);
             percentageList.push(percentageValue);
 			var angle_degree = (percentageValue / 100) * 360;// conversion percentage -> degree
+            context.shadowColor = 'rgba(0,0,0,0)';
             DrawArc(context,position_x,position_y,radius,angle_init,angle_degree,stylecolors[i]);
 			angle_init += angle_degree;
-
+            context.strokeStyle = "black";
+            context.shadowColor = "#bbbbbb";
+            context.shadowBlur = 2;
+            context.shadowOffsetX = 5;
+            context.shadowOffsetY = 5;
             DrawRectangle(
 				context,
                     diameter + 30,
@@ -67,14 +77,7 @@
         context.fillStyle = couleurs;
         context.fill();
         context.lineWidth = 5;
-        context.strokeStyle = "black";
-        context.shadowColor = "#bbbbbb";
-        context.shadowBlur = 2;
-        context.shadowOffsetX = 5;
-        context.shadowOffsetY = 5;
-        context.stroke();
         context.closePath();
-        context.fill();
     }
 
 	function DrawRectangle(context,x0,y0,xl,yl,coloration) {

@@ -10,7 +10,6 @@
     </form>
 </div>
 
-
 <h2>Sales total per month</h2>
 {% include 'KitpagesShopBundle:Admin/graph:graphRect.html.twig' with {'dataStatistic': dataStatisticList.salesPerMonth, 'id': 'salesPerMonth', 'canvasWidth': 500, 'canvasHeight':400} %}
 <h2>Sales total per day</h2>
@@ -19,4 +18,6 @@
 {% include 'KitpagesShopBundle:Admin/graph:graphCirc.html.twig' with {'dataStatistic': dataStatisticList.salesTopTen, 'id': 'salesTopTen', 'canvasWidth': 900, 'canvasHeight':400} %}
 <h2>Top ten quantity</h2>
 {% include 'KitpagesShopBundle:Admin/graph:graphCirc.html.twig' with {'dataStatistic': dataStatisticList.salesTopTenQuantity, 'id': 'salesTopTenQuantity', 'canvasWidth': 900, 'canvasHeight':400} %}
+<h2>Sales per category</h2>
+{% include 'KitpagesShopBundle:Admin/graph:graphCirc.html.twig' with {'dataStatistic': dataStatisticList.salesPerCategory, 'id': 'salesPerCategory', 'canvasWidth': 900, 'canvasHeight':400} %}
 {% endblock %}

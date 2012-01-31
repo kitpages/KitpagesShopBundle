@@ -54,8 +54,11 @@ class StatisticsManager
         $queryWhereList = array();
 
         foreach($parameterSelectList as $parameterSelect) {
+            if($parameterSelect == 'shopCategory') {
+                $querySelectList[] = "ol.shop_category as shopCategory";
+            }
             if($parameterSelect == 'shopName') {
-                $querySelectList[] = "ol.shop_name";
+                $querySelectList[] = "ol.shop_name as shopName";
             }
             if($parameterSelect == 'shopReferenceQantity') {
                 $querySelectList[] = "SUM(ol.quantity) as shopReferenceQantity";
@@ -77,6 +80,11 @@ class StatisticsManager
                 $queryJoinList['orderLine'] = " JOIN shop_order_line ol ON ol.order_id = o.id ";
                 $querySelectList[] = "ol.shop_reference as shopReference";
                 $queryGroupByList[] = "shopReference";
+            }
+            if($parameterGroupBy == 'shopCategory') {
+                $queryJoinList['orderLine'] = " JOIN shop_order_line ol ON ol.order_id = o.id ";
+                $querySelectList[] = "ol.shop_category as shopCategory";
+                $queryGroupByList[] = "shopCategory";
             }
         }
 

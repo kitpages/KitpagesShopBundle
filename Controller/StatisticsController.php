@@ -53,8 +53,9 @@ class StatisticsController extends Controller
 
         $statisticsManager = $this->get('kitpages_shop.statisticsManager');
 
-
-        // sales per month
+        /************************************
+        ********** sales per month **********
+        *************************************/
         $dateStart = new \DateTime("$year-01-01 00:00:00");
         $dateEnd = new \DateTime("$year-01-01 00:00:00");
         $dateEnd = $dateEnd->add(\DateInterval::createFromDateString('1 year'));
@@ -76,7 +77,9 @@ class StatisticsController extends Controller
             $dataStatisticList['salesPerMonth'][$dataDate->format('m')] = $data['priceTotalWithoutVat'];
         }
 
-        // sales per day for one month
+        /************************************
+        **** sales per day for one month ****
+        *************************************/
         $dateStart = new \DateTime("$year-$month-01 00:00:00");
         $dateEnd = new \DateTime("$year-$month-01 00:00:00");
         $dateEnd = $dateEnd->add(\DateInterval::createFromDateString('1 month'));
@@ -99,7 +102,9 @@ class StatisticsController extends Controller
             $dataStatisticList['salesPerDay'][$dataDate->format('d')] = $data['priceTotalWithoutVat'];
         }
 
-        // top ten products of the month
+        /************************************
+        *** top ten products of the month ***
+        *************************************/
         $dateStart = new \DateTime("$year-$month-01 00:00:00");
         $dateEnd = new \DateTime("$year-$month-01 00:00:00");
         $dateEnd = $dateEnd->add(\DateInterval::createFromDateString('1 month'));
@@ -124,8 +129,8 @@ class StatisticsController extends Controller
         $dataStatisticListSalesTopTen = $statisticsManager->sales($querySelect, $queryWhere, $queryGroupBy, $queryOrderBy);
 
         foreach($dataStatisticListSalesTopTen as $data) {
-            $dataStatisticList['salesTopTen'][$data['shop_name']] = $data['priceTotalWithoutVat'];
-            $dataStatisticList['salesTopTenQuantity'][$data['shop_name']] = $data['shopReferenceQantity'];
+            $dataStatisticList['salesTopTen'][$data['shopName']] = $data['priceTotalWithoutVat'];
+            $dataStatisticList['salesTopTenQuantity'][$data['shopName']] = $data['shopReferenceQantity'];
         }
 
         $other = array_slice($dataStatisticList['salesTopTen'], 11);
@@ -141,6 +146,40 @@ class StatisticsController extends Controller
             $dataStatisticList['salesTopTenQuantity']['other'] = array_sum($other);
         }
         arsort($dataStatisticList['salesTopTenQuantity']);
+
+
+
+        /************************************
+        ************* sale by category ******
+        *************************************/
+        $dateStart = new \DateTime("$year-$month-01 00:00:00");
+        $dateEnd = new \DateTime("$year-$month-01 00:00:00");
+        $dateEnd = $dateEnd->add(\DateInterval::createFromDateString('1 month'));
+
+
+        $queryWhere = array(
+            'stateDateStart' => $dateStart,
+            'stateDateEnd' => $dateEnd
+        );
+        $queryGroupBy = array(
+            'stateDate' => '%Y %m',
+            'shopCategory' => 'shopCategory'
+        );
+        $queryOrderBy = array(
+            'stateDate' => 'ASC'
+        );
+
+        $dataStatisticListSalesPerCatehory = $statisticsManager->sales($querySelect, $queryWhere, $queryGroupBy, $queryOrderBy);
+
+        foreach($dataStatisticListSalesPerCatehory as $data) {
+            $dataStatisticList['salesPerCategory'][$data['shopCategory']] = $data['priceTotalWithoutVat'];
+        }
+
+        arsort($dataStatisticList['salesPerCategory']);
+
+
+
+
 
         return $this->render(
             'KitpagesShopBundle:Admin:statistic.html.twig',
