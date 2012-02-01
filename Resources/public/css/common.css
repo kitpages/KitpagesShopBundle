@@ -35,6 +35,11 @@ table.kit-shop-admin-table tbody tr:hover td {
     display:none;
 }
 
+.kit-shop-admin-canvas {
+    background-color:#FFFFFF;
+    border: 3px solid #444;
+}
+
 
 
 

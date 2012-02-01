@@ -1,0 +1,20 @@
+<table class="kit-shop-admin-table" >
+    <thead>
+        <tr>
+        {% for key,value in dataStatistic.0 %}
+
+            <th>{{key}}</th>
+        {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+    {% for data in dataStatistic %}
+        <tr>
+        {% for key,value in data %}
+
+            <td>{{value}}</td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

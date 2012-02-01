@@ -37,7 +37,7 @@ class StatisticsController extends Controller
         $date = new \DateTime("2012-01-12");
 
         $year = $date->format('Y');
-        $month = $date->format('M');
+        $month = $date->format('m');
 
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
@@ -59,6 +59,13 @@ class StatisticsController extends Controller
         $dateStart = new \DateTime("$year-01-01 00:00:00");
         $dateEnd = new \DateTime("$year-01-01 00:00:00");
         $dateEnd = $dateEnd->add(\DateInterval::createFromDateString('1 year'));
+        for($i=1; $i<=12; $i++) {
+            $dataStatisticList['salesPerMonth'][$i] = 0;
+        }
+
+        $querySelect = array(
+            'orderPriceWithoutVatTotal' => 'orderPriceWithoutVatTotal'
+        );
 
         $queryWhere = array(
             'stateDateStart' => $dateStart,
@@ -71,10 +78,10 @@ class StatisticsController extends Controller
             'stateDate' => 'ASC'
         );
 
-        $dataStatisticSalesPerMonth = $statisticsManager->sales(array(), $queryWhere, $queryGroupBy, $queryOrderBy);
+        $dataStatisticSalesPerMonth = $statisticsManager->sales($querySelect, $queryWhere, $queryGroupBy, $queryOrderBy);
         foreach($dataStatisticSalesPerMonth as $data) {
             $dataDate = new \DateTime($data['stateDate']);
-            $dataStatisticList['salesPerMonth'][$dataDate->format('m')] = $data['priceTotalWithoutVat'];
+            $dataStatisticList['salesPerMonth'][$dataDate->format('n')] = $data['orderPriceWithoutVatTotal'];
         }
 
         /************************************
@@ -83,7 +90,13 @@ class StatisticsController extends Controller
         $dateStart = new \DateTime("$year-$month-01 00:00:00");
         $dateEnd = new \DateTime("$year-$month-01 00:00:00");
         $dateEnd = $dateEnd->add(\DateInterval::createFromDateString('1 month'));
+        for($i=1; $i<=intval(date("t",$month)); $i++) {
+            $dataStatisticList['salesPerDay'][$i] = 0;
+        }
 
+        $querySelect = array(
+            'orderPriceWithoutVatTotal' => 'orderPriceWithoutVatTotal'
+        );
         $queryWhere = array(
             'stateDateStart' => $dateStart,
             'stateDateEnd' => $dateEnd
@@ -95,11 +108,11 @@ class StatisticsController extends Controller
             'stateDate' => 'ASC'
         );
 
-        $dataStatisticSalesPerDay = $statisticsManager->sales(array(), $queryWhere, $queryGroupBy, $queryOrderBy);
+        $dataStatisticSalesPerDay = $statisticsManager->sales($querySelect, $queryWhere, $queryGroupBy, $queryOrderBy);
 
         foreach($dataStatisticSalesPerDay as $data) {
             $dataDate = new \DateTime($data['stateDate']);
-            $dataStatisticList['salesPerDay'][$dataDate->format('d')] = $data['priceTotalWithoutVat'];
+            $dataStatisticList['salesPerDay'][$dataDate->format('d')] = $data['orderPriceWithoutVatTotal'];
         }
 
         /************************************
@@ -111,6 +124,7 @@ class StatisticsController extends Controller
 
 
         $querySelect = array(
+            'orderLinePriceWithoutVatTotal' => 'orderLinePriceWithoutVatTotal',
             'shopName' => 'shopName',
             'shopReferenceQantity' => 'shopReferenceQantity'
         );
@@ -119,35 +133,39 @@ class StatisticsController extends Controller
             'stateDateEnd' => $dateEnd
         );
         $queryGroupBy = array(
-            'stateDate' => '%Y %m',
             'shopReference' => 'shopReference'
         );
         $queryOrderBy = array(
-            'stateDate' => 'ASC'
+            'orderLinePriceWithoutVatTotal' => 'DESC'
         );
 
         $dataStatisticListSalesTopTen = $statisticsManager->sales($querySelect, $queryWhere, $queryGroupBy, $queryOrderBy);
 
+        $nbProductDisplay = 10;
+        $i = 0;
+        $other = array(
+            'product' => 'other',
+            'total price without vat' => 0,
+            'quantity' => 0
+        );
         foreach($dataStatisticListSalesTopTen as $data) {
-            $dataStatisticList['salesTopTen'][$data['shopName']] = $data['priceTotalWithoutVat'];
-            $dataStatisticList['salesTopTenQuantity'][$data['shopName']] = $data['shopReferenceQantity'];
+            $dataStatisticList['salesTopTen'][] = array(
+                'product' => $data['shopName'],
+                'total price without vat' => $data['orderLinePriceWithoutVatTotal'],
+                'quantity' => $data['shopReferenceQantity']
+            );
+            $i++;
+            if ($nbProductDisplay < $i) {
+                $other['total price without vat'] = $other['total price without vat'] + $data['orderLinePriceWithoutVatTotal'];
+                $other['quantity'] = $other['quantity'] + $data['shopReferenceQantity'];
+            }
         }
 
-        $other = array_slice($dataStatisticList['salesTopTen'], 11);
         $dataStatisticList['salesTopTen'] = array_slice($dataStatisticList['salesTopTen'], 0, 10);
-        if (count($other) > 0) {
-            $dataStatisticList['salesTopTen']['other'] = array_sum($other);
+        if ($nbProductDisplay < $i) {
+            $dataStatisticList['salesTopTen'][] = $other;
         }
-        arsort($dataStatisticList['salesTopTen']);
-
-        $other = array_slice($dataStatisticList['salesTopTenQuantity'], 11);
-        $dataStatisticList['salesTopTenQuantity'] = array_slice($dataStatisticList['salesTopTenQuantity'], 0, 10);
-        if (count($other) > 0) {
-            $dataStatisticList['salesTopTenQuantity']['other'] = array_sum($other);
-        }
-        arsort($dataStatisticList['salesTopTenQuantity']);
-
-
+echo var_dump($dataStatisticList['salesTopTen']);
 
         /************************************
         ************* sale by category ******
@@ -156,23 +174,21 @@ class StatisticsController extends Controller
         $dateEnd = new \DateTime("$year-$month-01 00:00:00");
         $dateEnd = $dateEnd->add(\DateInterval::createFromDateString('1 month'));
 
-
+        $querySelect = array(
+            'orderLinePriceWithoutVatTotal' => 'orderLinePriceWithoutVatTotal'
+        );
         $queryWhere = array(
             'stateDateStart' => $dateStart,
             'stateDateEnd' => $dateEnd
         );
         $queryGroupBy = array(
-            'stateDate' => '%Y %m',
             'shopCategory' => 'shopCategory'
         );
-        $queryOrderBy = array(
-            'stateDate' => 'ASC'
-        );
+        $queryOrderBy = array();
 
         $dataStatisticListSalesPerCatehory = $statisticsManager->sales($querySelect, $queryWhere, $queryGroupBy, $queryOrderBy);
-
         foreach($dataStatisticListSalesPerCatehory as $data) {
-            $dataStatisticList['salesPerCategory'][$data['shopCategory']] = $data['priceTotalWithoutVat'];
+            $dataStatisticList['salesPerCategory'][$data['shopCategory']] = $data['orderLinePriceWithoutVatTotal'];
         }
 
         arsort($dataStatisticList['salesPerCategory']);

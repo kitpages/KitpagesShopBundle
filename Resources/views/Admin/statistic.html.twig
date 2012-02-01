@@ -15,9 +15,7 @@
 <h2>Sales total per day</h2>
 {% include 'KitpagesShopBundle:Admin/graph:graphRect.html.twig' with {'dataStatistic': dataStatisticList.salesPerDay, 'id': 'salesPerDay', 'canvasWidth': 900, 'canvasHeight':400} %}
 <h2>Top ten</h2>
-{% include 'KitpagesShopBundle:Admin/graph:graphCirc.html.twig' with {'dataStatistic': dataStatisticList.salesTopTen, 'id': 'salesTopTen', 'canvasWidth': 900, 'canvasHeight':400} %}
-<h2>Top ten quantity</h2>
-{% include 'KitpagesShopBundle:Admin/graph:graphCirc.html.twig' with {'dataStatistic': dataStatisticList.salesTopTenQuantity, 'id': 'salesTopTenQuantity', 'canvasWidth': 900, 'canvasHeight':400} %}
+{% include 'KitpagesShopBundle:Admin/graph:table.html.twig' with {'dataStatistic': dataStatisticList.salesTopTen, 'id': 'salesTopTen'} %}
 <h2>Sales per category</h2>
 {% include 'KitpagesShopBundle:Admin/graph:graphCirc.html.twig' with {'dataStatistic': dataStatisticList.salesPerCategory, 'id': 'salesPerCategory', 'canvasWidth': 900, 'canvasHeight':400} %}
 {% endblock %}

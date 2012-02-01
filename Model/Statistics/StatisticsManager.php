@@ -34,17 +34,6 @@ class StatisticsManager
 
         $parameterWhereList = array_merge($parameterWhereListIni, $parameterWhereList);
 
-        $parameterSelectListIni = array(
-            'priceWithoutVatTotal' => 'priceWithoutVatTotal'
-        );
-
-        $parameterSelectList = array_merge($parameterSelectListIni, $parameterSelectList);
-//        $queryGroupByIni = array(
-//            'date' => null // dateformat
-//        );
-//
-//        $queryGroupBy = array_merge($queryGroupByIni, $queryGroupBy);
-
         $parameterList = array();
         $parameterTypeList = array();
         $queryGroupByList = array();
@@ -55,16 +44,23 @@ class StatisticsManager
 
         foreach($parameterSelectList as $parameterSelect) {
             if($parameterSelect == 'shopCategory') {
+                $queryJoinList['orderLine'] = " JOIN shop_order_line ol ON ol.order_id = o.id ";
                 $querySelectList[] = "ol.shop_category as shopCategory";
             }
             if($parameterSelect == 'shopName') {
+                $queryJoinList['orderLine'] = " JOIN shop_order_line ol ON ol.order_id = o.id ";
                 $querySelectList[] = "ol.shop_name as shopName";
             }
             if($parameterSelect == 'shopReferenceQantity') {
+                $queryJoinList['orderLine'] = " JOIN shop_order_line ol ON ol.order_id = o.id ";
                 $querySelectList[] = "SUM(ol.quantity) as shopReferenceQantity";
             }
-            if($parameterSelect == 'priceWithoutVatTotal') {
-                $querySelectList[] = "SUM(o.price_without_vat) priceTotalWithoutVat";
+            if($parameterSelect == 'orderPriceWithoutVatTotal') {
+                $querySelectList[] = "SUM(o.price_without_vat) orderPriceWithoutVatTotal";
+            }
+            if($parameterSelect == 'orderLinePriceWithoutVatTotal') {
+                $queryJoinList['orderLine'] = " JOIN shop_order_line ol ON ol.order_id = o.id ";
+                $querySelectList[] = "SUM(ol.price_without_vat) orderLinePriceWithoutVatTotal";
             }
             if($parameterSelect == 'priceIncludingVatTotal') {
                 $querySelectList[] = "SUM(o.price_including_vat) priceTotalIncludingVat";
@@ -89,9 +85,7 @@ class StatisticsManager
         }
 
         foreach($parameterOrderByList as $parameterOrderBy => $direction) {
-            if($parameterOrderBy == 'stateDate') {
-                $queryOrderByList[] = "stateDate ".$direction;
-            }
+            $queryOrderByList[] = $parameterOrderBy." ".$direction;
         }
 
         $conn = $this->databaseConnection;
