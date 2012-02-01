@@ -165,7 +165,6 @@ class StatisticsController extends Controller
         if ($nbProductDisplay < $i) {
             $dataStatisticList['salesTopTen'][] = $other;
         }
-echo var_dump($dataStatisticList['salesTopTen']);
 
         /************************************
         ************* sale by category ******
