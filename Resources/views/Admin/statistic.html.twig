@@ -1,7 +1,6 @@
-{% extends "KitpagesShopBundle::layout.html.twig" %}
+{% extends "KitpagesShopBundle:Admin:layout.html.twig" %}
 
-{% block kitpages_shop_body %}
-
+{% block kitpages_shop_body_admin %}
 <div class="kit-shop-admin-filter">
     <form action="{{ path('KitpagesShopBundle_admin_statistics' ) }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}

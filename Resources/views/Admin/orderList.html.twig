@@ -1,15 +1,24 @@
-{% extends "KitpagesShopBundle::layout.html.twig" %}
+{% extends "KitpagesShopBundle:Admin:layout.html.twig" %}
 
-{% block kitpages_shop_body %}
-
+{% block kitpages_shop_body_admin %}
 <div class="kit-shop-admin-filter">
-    <form action="{{ path('KitpagesShopBundle_admin_orderList' ) }}" method="get" {{ form_enctype(form) }}>
+    <form action="{{ path('KitpagesShopBundle_admin_orderList' ) }}" method="POST" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
-
+        <br />
         <input type="submit" />
     </form>
-</div>
 
+<script>
+    $(document).ready(function() {
+        $(".kit-shop-paginator a").click(function (event) {
+            event.preventDefault();
+            $(".kit-shop-admin-filter form").attr("action", $(this).attr("href"));
+            $(".kit-shop-admin-filter form").submit();
+        });
+
+    });
+</script>
+</div>
 <table class="kit-shop-admin-table">
     <thead>
         <tr>

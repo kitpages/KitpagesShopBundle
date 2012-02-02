@@ -40,6 +40,20 @@ table.kit-shop-admin-table tbody tr:hover td {
     border: 3px solid #444;
 }
 
+.kit-shop-admin-filter {
+    padding:10px;
+    border:1px solid #000000;
+}
+.kit-shop-admin-filter #form > div{
+    margin-top:8px;
+}
+.kit-shop-admin-filter #form > div > div label{
+    margin-right:10px;
+    margin-left:2px;
+}
+.kit-shop-admin-filter #form > div label{
+    margin-right:4px;
+}
 
 
 
