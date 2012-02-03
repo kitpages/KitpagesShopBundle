@@ -33,7 +33,7 @@ class AdminController extends Controller
 
 
         $filterCheckBoxAllow = array(
-            "order.state" => array(
+            "order_state" => array(
                 'query' => 'o.state =',
                 'label' => 'state',
                 'value' => array(
@@ -44,7 +44,7 @@ class AdminController extends Controller
                 )
 
             ),
-            "order.priceWithoutVat" =>  array(
+            "order_priceWithoutVat" =>  array(
                 'query' => 'o.priceWithoutVat >',
                 'label' => ' ',
                 'value' => array(

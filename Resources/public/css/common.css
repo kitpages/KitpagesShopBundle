@@ -55,5 +55,9 @@ table.kit-shop-admin-table tbody tr:hover td {
     margin-right:4px;
 }
 
+.kit-shop-admin-filter #form_date{
+    display:inline-block;
+}
+
 
 
