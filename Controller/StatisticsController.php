@@ -113,7 +113,7 @@ class StatisticsController extends Controller
 
         foreach($dataStatisticSalesPerDay as $data) {
             $dataDate = new \DateTime($data['stateDate']);
-            $dataStatisticList['salesPerDay'][$dataDate->format('d')] = $data['orderPriceWithoutVatTotal'];
+            $dataStatisticList['salesPerDay'][$dataDate->format('j')] = $data['orderPriceWithoutVatTotal'];
         }
 
         /************************************
