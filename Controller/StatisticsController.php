@@ -34,7 +34,7 @@ class StatisticsController extends Controller
         // get form
         $form = $builder->getForm();
 
-        $date = new \DateTime("2012-01-12");
+        $date = new \DateTime();
 
         $year = $date->format('Y');
         $month = $date->format('m');
@@ -59,6 +59,7 @@ class StatisticsController extends Controller
         $dateStart = new \DateTime("$year-01-01 00:00:00");
         $dateEnd = new \DateTime("$year-01-01 00:00:00");
         $dateEnd = $dateEnd->add(\DateInterval::createFromDateString('1 year'));
+
         for($i=1; $i<=12; $i++) {
             $dataStatisticList['salesPerMonth'][$i] = 0;
         }
@@ -90,7 +91,7 @@ class StatisticsController extends Controller
         $dateStart = new \DateTime("$year-$month-01 00:00:00");
         $dateEnd = new \DateTime("$year-$month-01 00:00:00");
         $dateEnd = $dateEnd->add(\DateInterval::createFromDateString('1 month'));
-        for($i=1; $i<=intval(date("t",$month)); $i++) {
+        for($i=1; $i<=intval(date("t",$dateStart->getTimestamp())); $i++) {
             $dataStatisticList['salesPerDay'][$i] = 0;
         }
 
@@ -121,7 +122,7 @@ class StatisticsController extends Controller
         $dateStart = new \DateTime("$year-$month-01 00:00:00");
         $dateEnd = new \DateTime("$year-$month-01 00:00:00");
         $dateEnd = $dateEnd->add(\DateInterval::createFromDateString('1 month'));
-
+        $dataStatisticList['salesTopTen'] = array();
 
         $querySelect = array(
             'orderLinePriceWithoutVatTotal' => 'orderLinePriceWithoutVatTotal',
@@ -148,6 +149,7 @@ class StatisticsController extends Controller
             'total price without vat' => 0,
             'quantity' => 0
         );
+
         foreach($dataStatisticListSalesTopTen as $data) {
             $dataStatisticList['salesTopTen'][] = array(
                 'product' => $data['shopName'],
@@ -172,6 +174,7 @@ class StatisticsController extends Controller
         $dateStart = new \DateTime("$year-$month-01 00:00:00");
         $dateEnd = new \DateTime("$year-$month-01 00:00:00");
         $dateEnd = $dateEnd->add(\DateInterval::createFromDateString('1 month'));
+        $dataStatisticList['salesPerCategory'] = array();
 
         $querySelect = array(
             'orderLinePriceWithoutVatTotal' => 'orderLinePriceWithoutVatTotal'
