@@ -45,7 +45,7 @@ class AdminController extends Controller
 
             ),
             "order_priceWithoutVat" =>  array(
-                'query' => 'o.priceWithoutVat >',
+                'query' => 'o.price_without_vat >',
                 'label' => ' ',
                 'value' => array(
                     '0' => 'price ET not null'
@@ -89,7 +89,6 @@ class AdminController extends Controller
 
         $queryWhereString = '';
         $parameterList = array();
-        $filterSearch = '';
         if ($request->getMethod() == 'POST') {
             $form->bindRequest($request);
             if($form->isValid()) {
@@ -130,6 +129,7 @@ class AdminController extends Controller
                     $querySearchString = $this->searchSelect($filterSearch, $searchFieldList);
                 }
                 $countParam = 0;
+                $queryCheckBoxList = array();
                 foreach($filterCheckBoxAllow as $key => $filterCheckBox) {
                     if (isset($dataForm[$key])) {
                         $queryCheckBox = null;
@@ -177,7 +177,7 @@ class AdminController extends Controller
                         iu.first_name as iu_firstName,
                         iu.last_name as iu_lastName
                         '.$queryString.'
-                        ORDER BY o.state_date DESC';
+                        ORDER BY o.state_date DESC ';
         $queryCount = 'SELECT o.id '.$queryString;
 
 
