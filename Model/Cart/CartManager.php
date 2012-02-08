@@ -2,16 +2,24 @@
 namespace Kitpages\ShopBundle\Model\Cart;
 
 use Symfony\Component\HttpFoundation\Session;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 use Kitpages\ShopBundle\Model\PriceFactory\PriceFactoryInterface;
 use Kitpages\ShopBundle\Model\PriceFactory\PriceFactory;
 use Kitpages\ShopBundle\Model\Cart\CartInterface;
 use Kitpages\ShopBundle\Model\Cart\Cart;
+use Kitpages\ShopBundle\Event\ShopEvent;
+use Kitpages\ShopBundle\KitpagesShopEvents;
 
 class CartManager
     implements CartManagerInterface
 {
+    /** @var PriceFactoryInterface|null */
     protected $priceFactory = null;
+    /** @var null|Session */
     protected $session = null;
+    /** @var null|EventDispatcherInterface */
+    protected $dispatcher = null;
     /**
      * constructor of the service
      * @param Session current session
@@ -20,19 +28,33 @@ class CartManager
      */
     public function __construct(
         Session $session,
+        EventDispatcherInterface $dispatcher,
         PriceFactoryInterface $priceFactory = null,
         CartInterface $cart = null
     )
     {
+        $this->dispatcher = $dispatcher;
         $this->session = $session;
         if ($cart === null) {
             $cart = $this->session->get('kitpages_shop_cart', new Cart());
+
         }
-        $this->session->set('kitpages_shop_cart', $cart);
+
         if ($priceFactory === null) {
             $priceFactory = new PriceFactory($cart);
         }
         $this->priceFactory = $priceFactory;
+
+        if (! $this->session->get("kitpages_shop_cart")) {
+            $event = new ShopEvent();
+            $event->set("cart", $cart);
+            $event->set("priceFactory", $priceFactory);
+            $this->dispatcher->dispatch(KitpagesShopEvents::AFTER_CART_INIT, $event);
+            $this->priceFactory = $event->get("priceFactory");
+        }
+
+        $this->session->set('kitpages_shop_cart', $cart);
+
     }
 
     ////

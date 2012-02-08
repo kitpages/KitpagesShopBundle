@@ -10,6 +10,7 @@ use Kitpages\ShopBundle\Model\Cart\CartInterface;
 use Kitpages\ShopBundle\Event\ShopEvent;
 use Kitpages\ShopBundle\KitpagesShopEvents;
 use Kitpages\ShopBundle\Model\Cart\ProductInterface;
+use Kitpages\ShopBundle\Model\Discount\DiscountInterface;
 
 use Kitano\PaymentBundle\Event\PaymentEvent;
 use Kitano\PaymentBundle\Model\Transaction;
@@ -103,6 +104,8 @@ class OrderManager
 
             if ($line->getCartable() instanceof ProductInterface) {
                 $orderLine->setCartableClass('product');
+            } elseif ($line->getCartable() instanceof DiscountInterface) {
+                $orderLine->setCartableClass('discount');
             } else {
                 $orderLine->setCartableClass('other');
             }

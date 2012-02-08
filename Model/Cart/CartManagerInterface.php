@@ -2,6 +2,8 @@
 namespace Kitpages\ShopBundle\Model\Cart;
 
 use Symfony\Component\HttpFoundation\Session;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 use Kitpages\ShopBundle\Model\PriceFactory\PriceFactoryInterface;
 use Kitpages\ShopBundle\Model\PriceFactory\PriceFactory;
 use Kitpages\ShopBundle\Model\Cart\CartInterface;
@@ -14,11 +16,13 @@ interface CartManagerInterface
     /**
      * constructor of the service
      * @param Session current session
+     * @param EventDispatcherInterface $dispatcher
      * @param PriceFactoryInterface|null $priceFactory
      * @param CartInterface|null $cart
      */
     public function __construct(
         Session $session,
+        EventDispatcherInterface $dispatcher,
         PriceFactoryInterface $priceFactory = null,
         CartInterface $cart = null
     );

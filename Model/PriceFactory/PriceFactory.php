@@ -4,6 +4,7 @@ namespace Kitpages\ShopBundle\Model\PriceFactory;
 use Kitpages\ShopBundle\Model\Cart\CartInterface;
 use Kitpages\ShopBundle\Model\Cart\CartLineInterface;
 use Kitpages\ShopBundle\Model\Cart\ProductInterface;
+use Kitpages\ShopBundle\Model\Discount\DiscountFreeProduct;
 
 class PriceFactory
     implements PriceFactoryInterface
@@ -61,6 +62,49 @@ class PriceFactory
         $cartable = $line->getCartable();
         if ($cartable instanceof ProductInterface) {
             return $cartable->getShopUnitPrice() * $line->getQuantity();
+        }
+        if ($cartable instanceof DiscountFreeProduct) {
+            // get productList ordered by price and price > 0
+            $productList = $this->cart->getLineList();
+            $orderedList = array();
+            foreach ($productList as $product) {
+                if (! $product->getCartable() instanceof ProductInterface) {
+                    continue;
+                }
+                if ($product->getCartable()->getShopUnitPrice() == 0) {
+                    continue;
+                }
+                $orderedList[] = $product;
+            }
+            // order the list according to shopUnitPrice
+            usort($orderedList, function($item1, $item2) {
+                if ($item1->getCartable()->getShopUnitPrice() < $item2->getCartable()->getShopUnitPrice()) {
+                    return -1;
+                }
+                if ($item1->getCartable()->getShopUnitPrice() == $item2->getCartable()->getShopUnitPrice()) {
+                    return 0;
+                }
+                if ($item1->getCartable()->getShopUnitPrice() > $item2->getCartable()->getShopUnitPrice()) {
+                    return 1;
+                }
+                return null;
+            });
+            // get all products
+            $discount = $cartable;
+            $priceList = array();
+            foreach ($orderedList as $product) {
+                for ($i = 0 ; $i < $product->getQuantity() ; $i ++) {
+                    $priceList[] = $product->getCartable()->getShopUnitPrice();
+                }
+            }
+            $freeProductCount = (int) (count($priceList) / $discount->getProductCountToActivate() );
+
+            // calculating discount
+            $price = 0;
+            for ($i = 0; $i < $freeProductCount ; $i++) {
+                $price -= $priceList[$i];
+            }
+            return $price;
         }
         return 0;
     }
