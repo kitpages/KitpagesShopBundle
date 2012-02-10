@@ -13,7 +13,7 @@ use Kitpages\ShopBundle\Model\Cart\ProductInterface;
 use Kitpages\ShopBundle\Model\Discount\DiscountInterface;
 
 use Kitano\PaymentBundle\Event\PaymentEvent;
-use Kitano\PaymentBundle\Model\Transaction;
+use Kitano\PaymentBundle\Entity\Transaction;
 
 use Symfony\Component\HttpFoundation\Session;
 use Symfony\Bundle\DoctrineBundle\Registry;

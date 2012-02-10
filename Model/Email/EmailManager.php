@@ -11,7 +11,7 @@ use Kitpages\ShopBundle\Event\ShopEvent;
 use Kitpages\ShopBundle\KitpagesShopEvents;
 
 use Kitano\PaymentBundle\Event\PaymentEvent;
-use Kitano\PaymentBundle\Model\Transaction;
+use Kitano\PaymentBundle\Entity\Transaction;
 
 use Symfony\Component\HttpFoundation\Session;
 use Symfony\Bundle\DoctrineBundle\Registry;
