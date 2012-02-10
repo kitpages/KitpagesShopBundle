@@ -108,7 +108,8 @@ class OrderController extends Controller
                 $order->getPriceIncludingVat(),
                 new \DateTime(),
                 "EUR",
-                $order->getInvoiceUser()->getCountryCode()
+                $order->getInvoiceUser()->getCountryCode(),
+                $order->getLocale()
             );
             $em->persist($transaction);
             $em->flush();
