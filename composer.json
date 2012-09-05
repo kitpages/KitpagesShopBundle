@@ -1,0 +1,28 @@
+{
+    "name":        "kitpages/shop-bundle",
+    "type":        "symfony-bundle",
+    "description": "This bundle is used to create a shop with symfony2",
+    "keywords":    ["shop", "store", "symfony", "bundle", "twig"],
+    "homepage":    "https://github.com/kitpages/KitpagesShopBundle",
+    "license":     "MIT",
+
+    "authors": [
+        {
+            "name": "kitpages",
+            "homepage": "https://github.com/kitpages"
+        },
+    ],
+
+    "require": {
+        "php":                      ">=5.3.2",
+        "symfony/framework-bundle": ">=2.1.0"
+    },
+
+    "minimum-stability": "dev",
+
+    "autoload": {
+        "psr-0": {
+            "KitPages\\ShopBundle": ""
+        }
+    }
+}
