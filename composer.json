@@ -10,7 +10,7 @@
         {
             "name": "kitpages",
             "homepage": "https://github.com/kitpages"
-        },
+        }
     ],
 
     "require": {
