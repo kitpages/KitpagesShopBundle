@@ -18,7 +18,6 @@
         "symfony/framework-bundle": "2.0.*",
         "kitano/payment-bundle":"dev-master",
         "doctrine/orm":">=2.1.0",
-        "twig/twig": "1.0.*",
         "swiftmailer/swiftmailer":"4.2.*",
         "stof/doctrine-extensions-bundle": "1.*"
 
