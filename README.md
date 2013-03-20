@@ -1,7 +1,7 @@
 Kitpages Shop Bundle
 ====================
 
-This bundle is used to create a shop with symfony2.
+This bundle is used to create a shop with symfony2.0.
 
 This is a beta version.
 
