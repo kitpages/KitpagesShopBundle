@@ -8,9 +8,9 @@
 
     "authors": [
         {
-            "name": "kitpages",
-            "homepage": "https://github.com/kitpages"
-        },
+            "name": "Philippe Le Van",
+            "homepage": "https://twitter.com/#!/plv"
+        }
     ],
 
     "require": {
