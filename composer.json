@@ -16,7 +16,7 @@
     "require": {
         "php": ">=5.3.2",
         "symfony/framework-bundle": "2.1.*",
-        "kitano/payment-bundle":"*",
+        "kitano/payment-bundle":"dev-master",
         "doctrine/orm": ">=2.2.3,<2.4-dev",
         "swiftmailer/swiftmailer":"4.2.*",
         "stof/doctrine-extensions-bundle" : "1.x"
