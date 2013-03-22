@@ -31,7 +31,7 @@ class OrderController extends Controller
             $order->setUsername($this->get('security.context')->getToken()->getUsername());
         }
         // persist order
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $em->persist($order);
         $em->flush();
 
@@ -71,7 +71,7 @@ class OrderController extends Controller
             ($order->getState() == OrderHistory::STATE_CREATED)
         ) {
 
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
 
             if ($order->getUsername() == null) {
                 $order->setUsername($this->get('security.context')->getToken()->getUsername());

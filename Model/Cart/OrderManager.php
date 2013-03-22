@@ -170,7 +170,7 @@ class OrderManager
     }
 
     protected function getNewRandomKey() {
-        $em = $this->doctrine->getEntityManager();
+        $em = $this->doctrine->getManager();
         $repo = $em->getRepository("KitpagesShopBundle:Order");
         $keyExists = true;
         while ($keyExists == true ) {
@@ -201,14 +201,14 @@ class OrderManager
         }
         // check transaction success
         if ($transaction->getSuccess() === false) {
-            throw new Exception("paymentListener : transaction failed, transactionId=".$transaction->getId());
+            throw new \Exception("paymentListener : transaction failed, transactionId=".$transaction->getId());
         }
         // get order
-        $em = $this->doctrine->getEntityManager();
+        $em = $this->doctrine->getManager();
         $repo = $em->getRepository("KitpagesShopBundle:Order");
         $order = $repo->find($transaction->getOrderId());
         if (! $order instanceof Order) {
-            throw new Exception("paymentListener : unknown order for transactionId=".$transaction->getId());
+            throw new \Exception("paymentListener : unknown order for transactionId=".$transaction->getId());
         }
         if ($order->getState() == OrderHistory::STATE_PAYED) {
             $this->cartManager->getCart()->emptyCart();

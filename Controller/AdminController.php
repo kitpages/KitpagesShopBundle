@@ -225,7 +225,7 @@ class AdminController extends Controller
         $rsm->addFieldResult('iu', 'iu_lastName', 'lastName');
 
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $query = $em->createNativeQuery($queryOrderList, $rsm);
         $query->setParameters($parameterList);
         $orderList = $query->getResult();

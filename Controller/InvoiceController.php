@@ -24,14 +24,14 @@ class InvoiceController extends Controller
             return new Response('The user should be authenticated on this page');
         }
         $doctrine = $this->get("doctrine");
-        $em = $doctrine->getEntityManager();
+        $em = $doctrine->getManager();
         $repo = $em->getRepository("KitpagesShopBundle:Order");
         $order = $repo->find($orderId);
         if (! $order instanceof Order) {
-            throw new Exception("InvoiceController : unknown order for orderId=".$orderId);
+            throw new \Exception("InvoiceController : unknown order for orderId=".$orderId);
         }
         if ($order->getState() != OrderHistory::STATE_PAYED) {
-            throw new Exception("InvoiceController : order is not payed for orderId=".$orderId);
+            throw new \Exception("InvoiceController : order is not payed for orderId=".$orderId);
         }
         if (
             ! $this->get('security.context')->isGranted('ROLE_SHOP_ADMIN') &&
