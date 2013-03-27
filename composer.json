@@ -26,5 +26,7 @@
         "psr-0": {
             "Kitpages\\ShopBundle": ""
         }
-    }
+    },
+    "target-dir": "Kitpages/ShopBundle",
+    "minimum-stability": "dev"
 }
