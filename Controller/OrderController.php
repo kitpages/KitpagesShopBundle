@@ -24,7 +24,7 @@ class OrderController extends Controller
         $logger->debug("create order, user=".$this->get('security.context')->getToken()->getUser());
         // create order from cart
         $order = $orderManager->createOrder();
-        $order->setLocale($this->get('session')->getLocale());
+        $order->setLocale($this->get('request')->getLocale());
         if(
             $this->get('security.context')->isGranted('ROLE_SHOP_USER')
         ) {
@@ -47,7 +47,7 @@ class OrderController extends Controller
     }
 
     public function displayOrderAction(
-        Order $order,
+        $orderId,
         OrderUser $invoiceUser = null,
         OrderUser $shippingUser = null
     )
@@ -64,6 +64,9 @@ class OrderController extends Controller
         ) {
             return new Response('You are not allowed to see this order');
         }
+
+        $em = $this->getDoctrine()->getManager();
+        $order = $em->getRepository("KitpagesShopBundle:Order")->find($orderId);
 
         // modify ready_to_pay or created orders (and not payed or canceled orders)
         if (

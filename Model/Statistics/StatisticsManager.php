@@ -1,7 +1,7 @@
 <?php
 namespace Kitpages\ShopBundle\Model\Statistics;
 
-use Symfony\Bundle\DoctrineBundle\Registry;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 
 use Kitpages\ShopBundle\Entity\OrderHistory;
 

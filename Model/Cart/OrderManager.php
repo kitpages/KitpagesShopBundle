@@ -16,7 +16,7 @@ use Kitano\PaymentBundle\Event\PaymentEvent;
 use Kitano\PaymentBundle\Entity\Transaction;
 
 use Symfony\Component\HttpFoundation\Session;
-use Symfony\Bundle\DoctrineBundle\Registry;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Templating\EngineInterface;

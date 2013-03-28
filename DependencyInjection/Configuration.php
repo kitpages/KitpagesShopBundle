@@ -39,7 +39,7 @@ class Configuration implements ConfigurationInterface
     {
         $node
             ->children()
-                ->scalarNode('order_display_route_name')->cannotBeEmpty()->isRequired()->end()
+                ->scalarNode('order_display_route_name')->defaultValue('KitpagesShopBundle_order_displayOrder')->end()
                 ->booleanNode('is_cart_including_vat')->defaultTrue()->end()
                 ->scalarNode('from_email')->cannotBeEmpty()->isRequired()->end()
                 ->arrayNode('invoice_email_list')
