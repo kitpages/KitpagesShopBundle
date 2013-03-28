@@ -1,7 +1,7 @@
 <?php
 namespace Kitpages\ShopBundle\Model\Cart;
 
-use Symfony\Component\HttpFoundation\Session;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Kitpages\ShopBundle\Model\PriceFactory\PriceFactoryInterface;
