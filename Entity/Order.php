@@ -403,4 +403,50 @@ class Order
     {
         return $this->locale;
     }
+
+    /**
+     * Add orderHistoryList
+     *
+     * @param \Kitpages\ShopBundle\Entity\OrderHistory $orderHistoryList
+     * @return Order
+     */
+    public function addOrderHistoryList(\Kitpages\ShopBundle\Entity\OrderHistory $orderHistoryList)
+    {
+        $this->orderHistoryList[] = $orderHistoryList;
+    
+        return $this;
+    }
+
+    /**
+     * Remove orderHistoryList
+     *
+     * @param \Kitpages\ShopBundle\Entity\OrderHistory $orderHistoryList
+     */
+    public function removeOrderHistoryList(\Kitpages\ShopBundle\Entity\OrderHistory $orderHistoryList)
+    {
+        $this->orderHistoryList->removeElement($orderHistoryList);
+    }
+
+    /**
+     * Add orderLineList
+     *
+     * @param \Kitpages\ShopBundle\Entity\OrderLine $orderLineList
+     * @return Order
+     */
+    public function addOrderLineList(\Kitpages\ShopBundle\Entity\OrderLine $orderLineList)
+    {
+        $this->orderLineList[] = $orderLineList;
+    
+        return $this;
+    }
+
+    /**
+     * Remove orderLineList
+     *
+     * @param \Kitpages\ShopBundle\Entity\OrderLine $orderLineList
+     */
+    public function removeOrderLineList(\Kitpages\ShopBundle\Entity\OrderLine $orderLineList)
+    {
+        $this->orderLineList->removeElement($orderLineList);
+    }
 }
