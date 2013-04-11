@@ -52,11 +52,15 @@ class OrderController extends Controller
         OrderUser $shippingUser = null
     )
     {
+
         if (
             ! $this->get('security.context')->isGranted('ROLE_SHOP_USER')
         ) {
             return new Response('The user should be authenticated on this page');
         }
+
+        $em = $this->getDoctrine()->getManager();
+        $order = $em->getRepository("KitpagesShopBundle:Order")->find($orderId);
 
         if (
             ($order->getUsername() != null) &&
@@ -64,9 +68,6 @@ class OrderController extends Controller
         ) {
             return new Response('You are not allowed to see this order');
         }
-
-        $em = $this->getDoctrine()->getManager();
-        $order = $em->getRepository("KitpagesShopBundle:Order")->find($orderId);
 
         // modify ready_to_pay or created orders (and not payed or canceled orders)
         if (
