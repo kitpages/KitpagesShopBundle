@@ -1,4 +1,4 @@
-{% extends "KitpagesShopBundle::layout.html.twig" %}
+{% extends "KitpagesShopBundle::Invoice/layoutInvoice.html.twig" %}
 
 {% block kitpages_shop_body %}
 <table class="kitpages-shop-invoice" width="600" border="1" style="border: 1px solid #333; width: 600px;">
@@ -15,7 +15,7 @@
                 <h2>Client</h2>
                 {{order.invoiceUser.firstName}} {{order.invoiceUser.lastName}}<br/>
                 {{order.invoiceUser.email}}<br/>
-                {{order.invoiceUser.countryCode|kit_shop_country(app.session.locale)}}
+                {{order.invoiceUser.countryCode|kit_shop_country(app.request.locale)}}
             </td>
         </tr>
         <tr>
