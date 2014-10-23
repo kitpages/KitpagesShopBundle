@@ -12,10 +12,12 @@
         </tr>
         <tr>
             <td colspan="4">
-                <h2>Client</h2>
-                {{order.invoiceUser.firstName}} {{order.invoiceUser.lastName}}<br/>
-                {{order.invoiceUser.email}}<br/>
-                {{order.invoiceUser.countryCode|kit_shop_country(app.request.locale)}}
+                {% if order.invoiceUser|default('') != '' %}
+                    <h2>Client</h2>
+                    {{order.invoiceUser.firstName}} {{order.invoiceUser.lastName}}<br/>
+                    {{order.invoiceUser.email}}<br/>
+                    {{order.invoiceUser.countryCode|kit_shop_country(app.request.locale)}}
+                {% endif %}
             </td>
         </tr>
         <tr>

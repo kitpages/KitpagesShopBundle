@@ -72,6 +72,9 @@
             </cascade>
         </one-to-one>
 
+        <one-to-one field="paymentInstruction" target-entity="JMS\Payment\CoreBundle\Entity\PaymentInstruction">
+        </one-to-one>
+
     </entity>
 
 </doctrine-mapping>

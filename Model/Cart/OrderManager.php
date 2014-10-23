@@ -1,6 +1,9 @@
 <?php
 namespace Kitpages\ShopBundle\Model\Cart;
 
+use JMS\Payment\CoreBundle\Model\PaymentInstructionInterface;
+use JMS\Payment\CoreBundle\Model\PaymentInterface;
+use JMS\Payment\CoreBundle\PluginController\Event\PaymentStateChangeEvent;
 use Kitpages\ShopBundle\Entity\Order;
 use Kitpages\ShopBundle\Entity\OrderHistory;
 use Kitpages\ShopBundle\Entity\OrderLine;
@@ -193,32 +196,42 @@ class OrderManager
         }
     }
 
-    public function paymentListener(PaymentEvent $event)
+    public function paymentListener(PaymentStateChangeEvent $event)
     {
-        $transaction = $event->getTransaction();
-        if ($transaction == null) {
+        $this->logger->info("paymentListener : test1");
+        $payment = $event->getPayment();
+        if (!($payment instanceof PaymentInterface)) {
             return;
         }
-        // check transaction success
-        if ($transaction->getSuccess() === false) {
-            throw new \Exception("paymentListener : transaction failed, transactionId=".$transaction->getId());
+        $this->logger->info("paymentListener : testState".$payment->getState());
+        $this->logger->info("paymentListener : test2");
+        $paymentInstruction = $payment->getPaymentInstruction();
+        if (!($paymentInstruction instanceof PaymentInstructionInterface)) {
+            return;
         }
+        $this->logger->info("paymentListener : test3");
         // get order
         $em = $this->doctrine->getManager();
         $repo = $em->getRepository("KitpagesShopBundle:Order");
-        $order = $repo->find($transaction->getOrderId());
-        if (! $order instanceof Order) {
-            throw new \Exception("paymentListener : unknown order for transactionId=".$transaction->getId());
+        $order = $repo->findOneBy(array('paymentInstruction' => $paymentInstruction));
+        if (!$order instanceof Order) {
+            throw new \Exception("paymentListener : unknown order for paymentInstructionId=" . $paymentInstruction->getId());
         }
+        $this->logger->info("paymentListener : test4");
+
         if ($order->getState() == OrderHistory::STATE_PAYED) {
             $this->cartManager->getCart()->emptyCart();
         }
+
         if ($order->getState() != OrderHistory::STATE_READY_TO_PAY) {
-            $this->logger->info("paymentListener : orderId=".$order->getId()." not updated by payment process because state is not ready_to_pay");
+            $this->logger->info("paymentListener : orderId=" . $order->getId() . " not updated by payment process because state is not ready_to_pay");
             return;
         }
-        // transaction status ok
-        if ($transaction->getState() == Transaction::STATE_APPROVED) {
+        $this->logger->info("paymentListener : test5");
+        $this->logger->info("paymentListener : testState".$payment->getState());
+        // check transaction success
+        if ($payment->getState() === PaymentInterface::STATE_DEPOSITED) {
+
             // update order
             $orderHistory = new OrderHistory();
             $orderHistory->setUsername("payment-notification");
@@ -227,7 +240,7 @@ class OrderManager
             $orderHistory->setStateDate(new \DateTime());
             $orderHistory->setPriceIncludingVat($order->getPriceIncludingVat());
             $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
-            $orderHistory->setNote("Transaction accepted by the bank, transactionId=".$transaction->getId());
+            $orderHistory->setNote("Transaction accepted by the bank, paymentId=" . $payment->getId());
             $order->addOrderHistory($orderHistory);
             $em->flush(); // hack to have the historyId
             $order->setStateFromHistory();
@@ -242,12 +255,12 @@ class OrderManager
             $em->persist($invoice);
             $em->flush();
             // invoice generation step 2 (html and reference generation)
-            $invoice->setReference('I-'.$invoice->getId());
+            $invoice->setReference('I-' . $invoice->getId());
             $invoiceHtmlContent = $this->templating->render(
                 "KitpagesShopBundle:Invoice:table.html.twig",
                 array(
                     "order" => $order,
-                    "transaction" => $transaction,
+                    "payment" => $payment,
                     "invoice" => $invoice
                 )
             );
@@ -255,17 +268,15 @@ class OrderManager
             $em->flush();
 
             $event = new ShopEvent();
-            $event->set("transaction", $transaction);
+            $event->set("payment", $payment);
             $event->set("order", $order);
             $event->set("invoice", $invoice);
             $event->set("orderHistory", $orderHistory);
             $this->dispatcher->dispatch(KitpagesShopEvents::AFTER_ORDER_PAYED, $event);
-
-            return;
         }
 
         // transaction status ok
-        if ($transaction->getState() == Transaction::STATE_CANCELED_BY_USER) {
+        if ($payment->getState() === PaymentInterface::STATE_CANCELED) {
             // update order
             $orderHistory = new OrderHistory();
             $orderHistory->setUsername("payment-notification");
@@ -274,38 +285,60 @@ class OrderManager
             $orderHistory->setStateDate(new \DateTime());
             $orderHistory->setPriceIncludingVat($order->getPriceIncludingVat());
             $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
-            $orderHistory->setNote("Transaction canceled by the user, transactionId=".$transaction->getId());
+            $orderHistory->setNote("Transaction canceled by the user, paymentId=" . $payment->getId());
             $order->addOrderHistory($orderHistory);
             $em->flush(); // hack to have the historyId
             $order->setStateFromHistory();
             $em->flush();
 
             $event = new ShopEvent();
-            $event->set("transaction", $transaction);
+            $event->set("payment", $payment);
             $event->set("order", $order);
             $event->set("orderHistory", $orderHistory);
             $this->dispatcher->dispatch(KitpagesShopEvents::AFTER_ORDER_CANCELED, $event);
-
-            return;
         }
 
-        $orderHistory = new OrderHistory();
-        $orderHistory->setUsername("payment-notification");
-        $orderHistory->setOrder($order);
-        $orderHistory->setState(OrderHistory::STATE_READY_TO_PAY);
-        $orderHistory->setStateDate(new \DateTime());
-        $orderHistory->setPriceIncludingVat($order->getPriceIncludingVat());
-        $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
-        $orderHistory->setNote("Payment refused by the bank, transactionId=".$transaction->getId().", transactionState=".$transaction->getState());
-        $order->addOrderHistory($orderHistory);
-        $order->setStateFromHistory();
-        $em->flush();
+        // transaction status ok
+        if ($payment->getState() === PaymentInterface::STATE_FAILED) {
+            $orderHistory = new OrderHistory();
+            $orderHistory->setUsername("payment-notification");
+            $orderHistory->setOrder($order);
+            $orderHistory->setState(OrderHistory::STATE_READY_TO_PAY);
+            $orderHistory->setStateDate(new \DateTime());
+            $orderHistory->setPriceIncludingVat($order->getPriceIncludingVat());
+            $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
+            $orderHistory->setNote("Payment refused by the bank, paymentId=" . $payment->getId() . ", paymentState=" . $payment->getState());
+            $order->addOrderHistory($orderHistory);
+            $order->setStateFromHistory();
+            $em->flush();
 
-        $event = new ShopEvent();
-        $event->set("transaction", $transaction);
-        $event->set("order", $order);
-        $event->set("orderHistory", $orderHistory);
-        $this->dispatcher->dispatch(KitpagesShopEvents::AFTER_TRANSACTION_REFUSED, $event);
+            $event = new ShopEvent();
+            $event->set("payment", $payment);
+            $event->set("order", $order);
+            $event->set("orderHistory", $orderHistory);
+            $this->dispatcher->dispatch(KitpagesShopEvents::AFTER_TRANSACTION_REFUSED, $event);
+        }
+
+        // transaction status ok
+        if ($payment->getState() === PaymentInterface::STATE_EXPIRED) {
+            $orderHistory = new OrderHistory();
+            $orderHistory->setUsername("payment-notification");
+            $orderHistory->setOrder($order);
+            $orderHistory->setState(OrderHistory::STATE_READY_TO_PAY);
+            $orderHistory->setStateDate(new \DateTime());
+            $orderHistory->setPriceIncludingVat($order->getPriceIncludingVat());
+            $orderHistory->setPriceWithoutVat($order->getPriceWithoutVat());
+            $orderHistory->setNote("Payment expired by the bank, paymentId=" . $payment->getId() . ", paymentState=" . $payment->getState());
+            $order->addOrderHistory($orderHistory);
+            $order->setStateFromHistory();
+            $em->flush();
+
+            $event = new ShopEvent();
+            $event->set("payment", $payment);
+            $event->set("order", $order);
+            $event->set("orderHistory", $orderHistory);
+            $this->dispatcher->dispatch(KitpagesShopEvents::AFTER_TRANSACTION_EXPIRED, $event);
+        }
 
     }
 }

@@ -40,7 +40,15 @@ class KitpagesShopExtension extends Extension
         $this->remapParameters($config, $container, array(
             'invoice_email_list'  => 'kitpages_shop.invoice_email_list'
         ));
-
+//        $this->remapParameters($config, $container, array(
+//            'payment_complete_route_name'  => 'kitpages_shop.payment_complete_route_name'
+//        ));
+//        $this->remapParameters($config, $container, array(
+//            'payment_cancel_route_name'  => 'kitpages_shop.payment_cancel_route_name'
+//        ));
+        $this->remapParameters($config, $container, array(
+            'payment_list'  => 'kitpages_shop.payment_list'
+        ));
     }
 
     /**

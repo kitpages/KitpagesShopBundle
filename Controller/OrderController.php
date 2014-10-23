@@ -10,6 +10,7 @@ use Kitpages\ShopBundle\Entity\OrderUser;
 
 use Kitano\PaymentBundle\Entity\Transaction;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -47,6 +48,7 @@ class OrderController extends Controller
     }
 
     public function displayOrderAction(
+        Request $request,
         $orderId,
         OrderUser $invoiceUser = null,
         OrderUser $shippingUser = null
@@ -56,10 +58,16 @@ class OrderController extends Controller
         if (
             ! $this->get('security.context')->isGranted('ROLE_SHOP_USER')
         ) {
-            return new Response('The user should be authenticated on this page');
+            return $this->forward('KitpagesShopBundle:Order:forbidden', array(
+                'kitpages_target' => $this->generateUrl(
+                    'KitpagesShopBundle_order_forbidden',
+                    array('orderId'=> $orderId)
+                )
+            ));
         }
 
         $em = $this->getDoctrine()->getManager();
+
         $order = $em->getRepository("KitpagesShopBundle:Order")->find($orderId);
 
         if (
@@ -105,29 +113,30 @@ class OrderController extends Controller
             $order->addOrderHistory($orderHistory);
             $em->flush(); // hack in order to have an id in the orderHistory...
             $order->setStateFromHistory();
-
-            // build transaction
-            $transaction = new Transaction(
-                $order->getId(),
-                $order->getPriceIncludingVat(),
-                new \DateTime(),
-                "EUR",
-                $order->getInvoiceUser()->getCountryCode(),
-                $order->getLocale()
-            );
-            $em->persist($transaction);
             $em->flush();
+            $form = $this->get('kitpages_shop.paymentManager')->getChoosePaymentForm($order);
 
-            // generate link
-            $paymentSystemProxy = $this->get("kitano_payment.payment_system_proxy");
-            $paymentSystemProxy->setPaymentSystem($this->getPaymentSystem());
-            $linkToPayment = $paymentSystemProxy->renderLinkToPayment($transaction);
+            if ('POST' === $request->getMethod()) {
+                $form->handleRequest($request);
+
+                if ($form->isValid()) {
+                    $this->get("payment.plugin_controller")->createPaymentInstruction($instruction = $form->getData());
+
+                    $order->setPaymentInstruction($instruction);
+                    $this->get("doctrine.orm.entity_manager")->persist($order);
+                    $this->get("doctrine.orm.entity_manager")->flush($order);
+
+                    return new RedirectResponse($this->get('router')->generate('KitpagesShopBundle_payment_complete', array(
+                        'orderId' => $order->getId(),
+                    )));
+                }
+            }
 
             return $this->render(
                 'KitpagesShopBundle:Order:displayOrder.html.twig',
                 array(
                     'order' => $order,
-                    'linkToPayment' => $linkToPayment
+                    'form' => $form->createView()
                 )
             );
         }
@@ -139,8 +148,7 @@ class OrderController extends Controller
             return $this->render(
                 'KitpagesShopBundle:Order:displayOrder.html.twig',
                 array(
-                    'order' => $order,
-                    'linkToPayment' => ''
+                    'order' => $order
                 )
             );
         }
@@ -153,12 +161,11 @@ class OrderController extends Controller
         );
     }
 
-    /**
-     * @return \Ano\Bundle\PaymentBundle\PaymentSystem\CreditCardInterface
-     */
-    public function getPaymentSystem()
+    public function forbiddenAction()
     {
-        return $this->get($this->container->getParameter('payment.service'));
+        return $this->render(
+            'KitpagesShopBundle:Order:forbidden.html.twig'
+        );
     }
 
 }

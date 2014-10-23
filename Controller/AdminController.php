@@ -55,7 +55,7 @@ class AdminController extends Controller
 
         $request = $this->get('request');
 
-        $conn = $this->get('databaseConnection');
+        $conn = $this->get('database_connection');
 
 //        $logger = new \Doctrine\DBAL\Logging\EchoSQLLogger();
 //        $conn->getConfiguration()->setSQLLogger($logger);

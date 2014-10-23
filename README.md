@@ -1,7 +1,7 @@
 Kitpages Shop Bundle
 ====================
 
-This bundle is used to create a shop with symfony2.1.
+This bundle is used to create a shop with symfony2.5.
 
 This is a beta version.
 
@@ -11,7 +11,7 @@ Why this ShopBundle ?
 =====================
 * It is simple and robust
 * It is extendable (without creating a sub-bundle)
-* It is linked to the KitanoPaymentBundle
+* It is linked to the JmsPaymentCoreBundle
 * It does *NOT* contain catalog or discount system but everything is
 done to integrate existing catalog or discount system.
 
@@ -28,7 +28,7 @@ Features
 * invoice creation
 * vat management
 * email sending
-* payment management with the KitanoPaymentBundle
+* payment management with the JmsPaymentCoreBundle
 * administration for orders / invoice
 
 

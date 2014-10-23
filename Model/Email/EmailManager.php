@@ -74,29 +74,30 @@ class EmailManager
         $order = $event->get("order");
         $transaction = $event->get("transaction");
 
-        $subject = $this->templating->render(
-            "KitpagesShopBundle:Email:afterOrderPayedSubject.html.twig",
-            array(
-                "order" => $order,
-                "transaction" => $transaction
-            )
-        );
-        $body = $this->templating->render(
-            "KitpagesShopBundle:Email:afterOrderPayedBody.html.twig",
-            array(
-                "order" => $order,
-                "transaction" => $transaction
-            )
-        );
+        if($order->getInvoiceUser() instanceof OrderUser) {
+            $subject = $this->templating->render(
+                "KitpagesShopBundle:Email:afterOrderPayedSubject.html.twig",
+                array(
+                    "order" => $order,
+                    "transaction" => $transaction
+                )
+            );
+            $body = $this->templating->render(
+                "KitpagesShopBundle:Email:afterOrderPayedBody.html.twig",
+                array(
+                    "order" => $order,
+                    "transaction" => $transaction
+                )
+            );
 
-        $message = \Swift_Message::newInstance()
-            ->setFrom($this->fromEmail)
-            ->setTo($order->getInvoiceUser()->getEmail())
-            ->setSubject($subject)
-            ->setBody($body)
-            ->setContentType('text/html');
-        $this->mailer->send($message);
-
+            $message = \Swift_Message::newInstance()
+                ->setFrom($this->fromEmail)
+                ->setTo($order->getInvoiceUser()->getEmail())
+                ->setSubject($subject)
+                ->setBody($body)
+                ->setContentType('text/html');
+            $this->mailer->send($message);
+        }
         // mail to administrators with invoice
         $invoiceSubject = $this->templating->render(
             "KitpagesShopBundle:Email:afterOrderPayedInvoiceEmailSubject.html.twig",

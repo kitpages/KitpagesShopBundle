@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="kitpages_shop.cartManager.class">Kitpages\ShopBundle\Model\Cart\CartManager</parameter>
         <parameter key="kitpages_shop.orderManager.class">Kitpages\ShopBundle\Model\Cart\OrderManager</parameter>
+        <parameter key="kitpages_shop.paymentManager.class">Kitpages\ShopBundle\Model\Payment\PaymentManager</parameter>
         <parameter key="kitpages_shop.mailManager.class">Kitpages\ShopBundle\Model\Email\EmailManager</parameter>
         <parameter key="kitpages_shop.statisticsManager.class">Kitpages\ShopBundle\Model\Statistics\StatisticsManager</parameter>
     </parameters>
@@ -26,8 +27,7 @@
             <argument type="service" id="templating"/>
             <argument type="service" id="event_dispatcher"/>
 
-            <tag name="kernel.event_listener" event="kitano_payment.event.after_payment_notification" method="paymentListener" />
-            <tag name="kernel.event_listener" event="kitano_payment.event.after_back_to_shop" method="paymentListener" />
+            <tag name="kernel.event_listener" event="payment.state_change" method="paymentListener" />
         </service>
 
         <service id="kitpages_shop.mailManager" class="%kitpages_shop.mailManager.class%">
@@ -45,6 +45,12 @@
         <service id="kitpages_shop.statisticsManager" class="%kitpages_shop.statisticsManager.class%">
             <argument type="service" id="doctrine"/>
             <argument type="service" id="database_connection"/>
+        </service>
+
+        <service id="kitpages_shop.paymentManager" class="%kitpages_shop.paymentManager.class%">
+            <argument type="service" id="form.factory"/>
+            <argument type="service" id="router"/>
+            <argument>%kitpages_shop.payment_list%</argument>
         </service>
 
         <service id="kitpages_shop.twig.extension.shopExtension" class="Kitpages\ShopBundle\Twig\Extension\ShopExtension">

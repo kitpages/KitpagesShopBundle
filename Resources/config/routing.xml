@@ -28,6 +28,19 @@
         <default key="_controller">KitpagesShopBundle:Order:displayOrder</default>
     </route>
 
+    <route id="KitpagesShopBundle_order_forbidden" pattern="/order/forbidden/{orderId}">
+        <default key="_controller">KitpagesShopBundle:Order:displayOrder</default>
+    </route>
+
+    <!-- payment -->
+    <route id="KitpagesShopBundle_payment_complete" pattern="/payment/{orderId}/complete">
+        <default key="_controller">KitpagesShopBundle:Payment:complete</default>
+    </route>
+
+    <route id="KitpagesShopBundle_payment_cancel" pattern="/payment/{orderId}/cancel">
+        <default key="_controller">KitpagesShopBundle:Payment:cancel</default>
+    </route>
+
     <import resource="@KitpagesShopBundle/Resources/config/routing/admin.xml" prefix="/admin" />
 
 </routes>

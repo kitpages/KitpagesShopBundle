@@ -14,7 +14,7 @@ class StatisticsManager
     )
     {
         $this->doctrine = $doctrine;
-        $this->databaseConnection = $database_connection;
+        $this->database_Connection = $database_connection;
     }
 
     public function sales(
@@ -88,7 +88,7 @@ class StatisticsManager
             $queryOrderByList[] = $parameterOrderBy." ".$direction;
         }
 
-        $conn = $this->databaseConnection;
+        $conn = $this->database_Connection;
 //        $logger = new \Doctrine\DBAL\Logging\EchoSQLLogger();
 //        $conn->getConfiguration()->setSQLLogger($logger);
 

@@ -11,4 +11,6 @@ final class KitpagesShopEvents
     const AFTER_CART_INIT = 'kitpages_shop.event.after_cart_init';
 
     const AFTER_TRANSACTION_REFUSED = 'kitpages_shop.event.after_transaction_refused';
+
+    const AFTER_TRANSACTION_EXPIRED = 'kitpages_shop.event.after_transaction_expired';
 }
