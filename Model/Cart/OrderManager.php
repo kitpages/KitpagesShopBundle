@@ -198,18 +198,14 @@ class OrderManager
 
     public function paymentListener(PaymentStateChangeEvent $event)
     {
-        $this->logger->info("paymentListener : test1");
         $payment = $event->getPayment();
         if (!($payment instanceof PaymentInterface)) {
             return;
         }
-        $this->logger->info("paymentListener : testState".$payment->getState());
-        $this->logger->info("paymentListener : test2");
         $paymentInstruction = $payment->getPaymentInstruction();
         if (!($paymentInstruction instanceof PaymentInstructionInterface)) {
             return;
         }
-        $this->logger->info("paymentListener : test3");
         // get order
         $em = $this->doctrine->getManager();
         $repo = $em->getRepository("KitpagesShopBundle:Order");
@@ -217,7 +213,6 @@ class OrderManager
         if (!$order instanceof Order) {
             throw new \Exception("paymentListener : unknown order for paymentInstructionId=" . $paymentInstruction->getId());
         }
-        $this->logger->info("paymentListener : test4");
 
         if ($order->getState() == OrderHistory::STATE_PAYED) {
             $this->cartManager->getCart()->emptyCart();
@@ -227,8 +222,6 @@ class OrderManager
             $this->logger->info("paymentListener : orderId=" . $order->getId() . " not updated by payment process because state is not ready_to_pay");
             return;
         }
-        $this->logger->info("paymentListener : test5");
-        $this->logger->info("paymentListener : testState".$payment->getState());
         // check transaction success
         if ($payment->getState() === PaymentInterface::STATE_DEPOSITED) {
 

@@ -40,7 +40,9 @@ class PaymentController extends Controller
         }
 
         $result = $this->get("payment.plugin_controller")->approveAndDeposit($payment->getId(), $payment->getTargetAmount());
-
+        $logger = $this->get('logger');
+        $logger->info("payment complete action");
+        $logger->info("payment:".$result->getStatus());
         if (Result::STATUS_PENDING === $result->getStatus()) {
             $ex = $result->getPluginException();
 
@@ -48,15 +50,17 @@ class PaymentController extends Controller
                 $action = $ex->getAction();
 
                 if ($action instanceof VisitUrl) {
+                    $logger->info("payment redirect");
                     return new RedirectResponse($action->getUrl());
                 }
-
+                $logger->info("payment exception ".$ex->getMessage());
                 throw $ex;
             }
         } else if (Result::STATUS_SUCCESS !== $result->getStatus()) {
+            $logger->info('Transaction was not successful: '.$result->getReasonCode());
             throw new \RuntimeException('Transaction was not successful: '.$result->getReasonCode());
         }
-
+        $logger->info("payment complete success");
         $displayOrderRoute = $this->container->getParameter('kitpages_shop.order_display_route_name');
         return new RedirectResponse($this->get('router')->generate($displayOrderRoute, array(
             'orderId' => $order->getId(),
